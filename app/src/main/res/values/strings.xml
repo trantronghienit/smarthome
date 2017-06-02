@@ -83,8 +83,9 @@
     <string name="color_temperature">Color Temperature</string>
     <string name="saturation">Bão hòa</string>
     <string name="hue">Hue</string>
-    <string name="brightness">độ sáng</string>
-    <string name="state_label_header_single">Thuộc tính</string>
+    <string name="brightness">độ sáng của thiết bị hiện tại</string>
+
+    <string name="state_label_header_single">Chi tiết thiết bị</string>
     <string name="state_label_header_start">Bắt đầu thuộc tính</string>
     <string name="state_label_header_end">Kết thúc thuộc tính</string>
     <string name="star">*</string>
@@ -280,4 +281,14 @@
     <string name="title_tab_system_detail">Chi tiết hệ thống</string>
     <string name="switch_off">Tắt</string>
     <string name="switch_on">Bật</string>
+
+    <!-- picker -->
+    <string name="roboto_regular">sans-serif</string>
+    <string name="roboto_light">sans-serif-light</string>
+    <string name="roboto_condensed">sans-serif-condensed</string>
+    <string name="roboto_thin">sans-serif-thin</string>
+    <string name="roboto_medium">sans-serif-medium</string>
+
+    <string name="number_picker_formatter">%02d</string>
+    <string name="light_intensity_message">Off thiết bị theo dõi cường độ sáng tầng \"%1$s.\</string>
 </resources>

@@ -21,5 +21,6 @@
     <dimen name="font_size_1">14sp</dimen>
     <dimen name="font_size_2">13sp</dimen>
     <dimen name="font_size_3">12sp</dimen>
+    <dimen name="size_text_detail">30dp</dimen>
 
 </resources>

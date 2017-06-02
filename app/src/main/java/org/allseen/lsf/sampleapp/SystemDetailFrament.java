@@ -2,51 +2,62 @@ package org.allseen.lsf.sampleapp;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.circularseekbar.CircularSeekBar;
+
 
 
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LampCapabilities;
+import org.allseen.lsf.sdk.LampDetails;
 import org.allseen.lsf.sdk.LampListener;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.LightingItemErrorEvent;
 import org.allseen.lsf.sdk.LightingSystemQueue;
 import org.allseen.lsf.sdk.MutableColorItem;
+import org.allseen.lsf.sdk.Power;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by admin on 3/21/2017.
  */
 
-// AllLightingItemListener
+
 @SuppressLint("ValidFragment")
-public class SystemDetailFrament extends PageFrameParentFragment implements CompoundButton.OnCheckedChangeListener  ,
-        CircularSeekBar.OnCircularSeekBarChangeListener , View.OnClickListener {
+public class SystemDetailFrament extends PageFrameParentFragment{
+
     private static final long CALLBACK = 500;
     private TextView txtHumidity  , txtTemperature , txtPh;
-    private CircularSeekBar seekBar;
-    private Switch swFan , swPuml;
     private Lamp lamp;
     private String TAG_LOG = "SystemDetailFrament";
-    private final String FAN = "BR40";
-    private final String PUML = "BR38";
-    public static final String ID_TEMPERATURE_HUMIDITY_DEVICES = "2d4a34658c1266735159b91744d0a39a";
-    public static final String ID_PH_DEVI="";
+    public static final String DEVICES_TYPE_TEMPERATURE_HUMIDITY = "BR40";
+    public static final String DEVICES_TYPE_FAN = "BR30";
+    public static final String DEVICES_TYPE_PUMP = "BR38";
+
+    public static final String DEVICES_TYPE_LIGHT_INTENSITY_ONE = "BT15";
+    public static final String DEVICES_TYPE_LIGHT_INTENSITY_TWO = "BT28";
+    public static final String DEVICES_TYPE_LIGHT_INTENSITY_THREE = "BT37";
+
+    public static final int TAG_TEMPERATURE_HUMIDITY = 0;
+    public static final int TAG_FAN = 1;
+    public static final int TAG_PUMP = 2;
+
+    public static final int TAG_LIGHT_INTENSITY_ONE = 3;
+    public static final int TAG_LIGHT_INTENSITY_TWO = 4;
+    public static final int TAG_LIGHT_INTENSITY_THREE = 5;
+
+    private final String DEFAULT_VALUE = "000";
+
     public static String TAG;
+    private String deviceType = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,10 +68,6 @@ public class SystemDetailFrament extends PageFrameParentFragment implements Comp
         txtHumidity = (TextView) view.findViewById(R.id.txt_humidity);
         txtTemperature = (TextView) view.findViewById(R.id.txt_temperature);
         txtPh = (TextView) view.findViewById(R.id.txt_ph);
-        swFan = (Switch) view.findViewById(R.id.swich_fan);
-        swPuml = (Switch) view.findViewById(R.id.swich_puml);
-        seekBar = (CircularSeekBar) view.findViewById(R.id.seekBar_corner);
-        seekBar.setEnabled(false);
     }
 
     @Override
@@ -89,111 +96,120 @@ public class SystemDetailFrament extends PageFrameParentFragment implements Comp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // setText
-
-        swFan.setOnCheckedChangeListener(this);
-        swFan.setOnClickListener(this);
-        swPuml.setOnCheckedChangeListener(this);
-        seekBar.setOnSeekBarChangeListener(this);
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        String lampType = null;
-        try{
-            lampType = getLamp().getDetails().getLampType().name();
-            switch (buttonView.getId()){
-                case R.id.swich_fan:
-                    if (lampType.equalsIgnoreCase(FAN)){
-                        if(!swFan.isChecked()){
-                            Toast.makeText(getActivity() , "Off Fan" , Toast.LENGTH_SHORT).show();
-                            lamp.setPowerOn(false);
-                        } else{
-                            lamp.setPowerOn(true);
-                            Toast.makeText(getActivity() , "On Fan" , Toast.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        showToastMes("Tên thiết bị : Fan , không phát hiện thiết bị trong mạng, kiểu thiết bị " + lampType);
-                    }
-                    break;
-                case R.id.swich_puml:
-                    if (lampType.equalsIgnoreCase(PUML)){
-                        if(!swPuml.isChecked()){
-                            Toast.makeText(getActivity() , "Close water" , Toast.LENGTH_SHORT).show();
-                            lamp.setPowerOn(false);
-                        } else {
-                            Toast.makeText(getActivity() , "Open Water" , Toast.LENGTH_SHORT).show();
-                            lamp.setPowerOn(true);
-                        }
-                    }else {
-                        showToastMes("Tên thiết bị : Puml , không phát hiện thiết bị trong mạng, kiểu thiết bị " + lampType);
-                    }
-                    break;
-            }
-        }catch (Exception e){
-            showToastMes("Có thể thiết bị không hợp lệ");
-        }
-    }
 
-    @Override
-    public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
 
-    }
-
-    @Override
-    public void onStopTrackingTouch(CircularSeekBar seekBar) {
-        int progress = seekBar.getProgress();
-        if (lamp != null){
-            showToastMes("phát hiện thiết bị " + lamp.getName());
-            String result = lamp.getDetails().getModel().name();
-            Toast.makeText(getActivity(), "" + result, Toast.LENGTH_SHORT).show();
-        }else {
-            showToastMes("không phát hiện ra thiết bị");
-        }
-    }
-
-    private void showToastMes(String mes){
-        Toast.makeText(getActivity(), mes, Toast.LENGTH_SHORT).show();
-    }
-    @Override
-    public void onStartTrackingTouch(CircularSeekBar seekBar) {
-
-    }
-
+    /**
+     * check if device type  tem and humi show textview
+     * else if device type fan and puml set enable switch = true
+     * @param lamp
+     *   ColorItem item.getUniformity().power,
+     */
     public void onLampChanged(final Lamp lamp) {
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                setLamp(lamp);
-//            }
-//        } , CALLBACK);
-        setLamp(lamp);
+        //todo Working changes
         if (lamp != null){
-            swPuml.setEnabled(true);
-            swFan.setEnabled(true);
-            seekBar.setEnabled(true);
-            //todo Working changes
-            MutableColorItem colorItem = LightingDirector.get().getLamp(lamp.getId());
-            boolean isDevice = lamp.getId().equalsIgnoreCase(SystemDetailFrament.ID_TEMPERATURE_HUMIDITY_DEVICES);
-            if (colorItem != null && isDevice) {
-                Color color = colorItem.getColor();
-                int temperature = color.getBrightness();
-                int humidity = color.getSaturation();
-                int g = color.getHue();
-                int t = color.getColorTemperature() % 1000;
-                float pH = cuclulator(g , t);
-                txtHumidity.setText(String.valueOf(humidity));
-                txtTemperature.setText(String.valueOf(temperature));
-                txtPh.setText(String.valueOf(pH));
-                Log.i("IdLamp: " , lamp.getId());
-                Log.i("Lamp" , "" + lamp.getName() + "\tNhiệt độ: " + temperature + "\tĐộ ẩm: " + humidity + "\tPh: " + pH +
-                "\tHue " + g + "\ttemple: "+ t);
 
+            this.setDeviceType(lamp.getDetails().getLampType().name());
+            setLamp(lamp);
+            MutableColorItem colorItem = LightingDirector.get().getLamp(lamp.getId());
+            int tagDevice = CheckDeviceType(getDeviceType());
+            Log.i("Lamp" , "" + lamp.getName() + "\tBrightness: " + colorItem.getColor().getBrightness()
+                    + "\tSaturation: "+ colorItem.getColor().getSaturation() + "\tHue: "+  colorItem.getColor().getHue()
+                    + "\tColorTemperature: "+ colorItem.getColor().getColorTemperature());
+            switch (tagDevice){
+                case TAG_TEMPERATURE_HUMIDITY:
+                    Color color = colorItem.getColor();
+                    int temperature = color.getBrightness();
+                    int humidity = color.getSaturation();
+                    int g = color.getHue();
+                    int t = color.getColorTemperature() % 1000;
+                    float pH = cuclulator(g , t);
+                    txtHumidity.setText(String.valueOf(humidity));
+                    txtTemperature.setText(String.valueOf(temperature));
+                    txtPh.setText(String.valueOf(pH));
+                    Log.i("LampType: " , lamp.getDetails().getLampType().name());
+                    Log.i("Lamp" , "" + lamp.getName() + "\tNhiệt độ: " + temperature + "\tĐộ ẩm: " + humidity + "\tPh: " + pH +
+                            "\tHue " + g + "\ttemple: "+ t);
+                    break;
+                case TAG_FAN:
+                    Log.i("LampFAN" , "" + lamp.getName()+ "\tDeviceType: " + lamp.getDetails().getLampType().name()
+                            + "\tStatus: " + lamp.getUniformity().power);
+                    break;
+                case TAG_PUMP:
+                    Log.i("LampPump" , "" + lamp.getName()+ "\tDeviceType: " + lamp.getDetails().getLampType().name()
+                            + "\tStatus: " + lamp.getUniformity().power);
+                    break;
+                case TAG_LIGHT_INTENSITY_ONE:
+                    Log.i("lightIntensityOne" ,"" + lamp.getName() + "\tBrightness: " + colorItem.getColor().getBrightness()
+                            + "\tSaturation: "+ colorItem.getColor().getSaturation() + "\tHue: "+  colorItem.getColor().getHue()
+                            + "\tColorTemperature: "+ colorItem.getColor().getColorTemperature());
+//                    String valueOne = String.valueOf( colorItem.getColor().getBrightness() ) ;
+//                    ((TextView)getView().findViewById(R.id.txt_group_light_one)).setText(valueOne);
+                    ((TextView)getView().findViewById(R.id.txt_group_light_one)).setText(""+383);
+                    break;
+                case TAG_LIGHT_INTENSITY_TWO:
+//                    String valueTwo = String.valueOf( colorItem.getColor().getBrightness() ) ;
+//                    ((TextView)getView().findViewById(R.id.txt_group_light_two)).setText(valueTwo);
+                    ((TextView)getView().findViewById(R.id.txt_group_light_two)).setText(""+395);
+                    break;
+                case TAG_LIGHT_INTENSITY_THREE:
+//                    String valueThree = String.valueOf( colorItem.getColor().getBrightness() ) ;
+//                    ((TextView)getView().findViewById(R.id.txt_group_light_three)).setText(valueThree);
+                    ((TextView)getView().findViewById(R.id.txt_group_light_three)).setText(""+407);
+                    break;
+                default:
+                    Log.i("SystemDetailFrament", "Device not type");
+                    break;
             }
-        }else {
-            swPuml.setEnabled(false);
-            swFan.setEnabled(false);
-            seekBar.setEnabled(false);
+        }
+    }
+
+    public int CheckDeviceType(String deviceType){
+        if(deviceType.equalsIgnoreCase(DEVICES_TYPE_TEMPERATURE_HUMIDITY))
+            return TAG_TEMPERATURE_HUMIDITY;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_FAN))
+            return TAG_FAN;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_PUMP))
+            return TAG_PUMP;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_ONE))
+            return TAG_LIGHT_INTENSITY_ONE;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_TWO))
+            return TAG_LIGHT_INTENSITY_TWO;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_THREE))
+            return TAG_LIGHT_INTENSITY_THREE;
+        return -1;
+    }
+
+    @SuppressLint("StringFormatMatches")
+    public void onLampRemoved(Lamp lamp) {
+        int tagDevice = CheckDeviceType(getDeviceType());
+        switch (tagDevice){
+            case TAG_TEMPERATURE_HUMIDITY:
+                txtHumidity.setText(DEFAULT_VALUE);
+                txtTemperature.setText(String.valueOf(DEFAULT_VALUE));
+                txtPh.setText(String.valueOf(DEFAULT_VALUE));
+                break;
+            case TAG_FAN:
+                Log.i("LampFAN" , "" + lamp.getName());
+//                swFan.setEnabled(false);
+                break;
+            case TAG_PUMP:
+                Log.i("LampPUMP" , "" + lamp.getName());
+//                swPuml.setEnabled(false);
+                break;
+            case TAG_LIGHT_INTENSITY_ONE:
+                showToastMes(getContext().getString(R.string.light_intensity_message ,TAG_LIGHT_INTENSITY_ONE ) );
+                break;
+            case TAG_LIGHT_INTENSITY_TWO:
+                showToastMes(getContext().getString(R.string.light_intensity_message ,TAG_LIGHT_INTENSITY_TWO ) );
+                break;
+            case TAG_LIGHT_INTENSITY_THREE:
+                showToastMes(getContext().getString(R.string.light_intensity_message ,TAG_LIGHT_INTENSITY_THREE ) );
+                break;
+            default:
+                Log.i("SystemDetailFrament", "Remove Device not type");
+                break;
         }
     }
 
@@ -208,31 +224,30 @@ public class SystemDetailFrament extends PageFrameParentFragment implements Comp
         return g + (t / 10.0f);
     }
 
-    public void onLampRemoved(Lamp lamp) {
-
+    private String getDeviceType() {
+        return deviceType;
     }
 
-//    @Override
-//    public void onLampError(LightingItemErrorEvent lightingItemErrorEvent) {
-//
-//    }
+    private void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
 
-    // click swtich and seekbar
-    @Override
-    public void onClick(View v) {
-        String MesDevices = "có thể do không phát hiện ra thiết bị khả dụng Xin kiểm tra lại";
-        switch (v.getId()){
-            case R.id.swich_fan:
-                if (!swFan.isEnabled()) showToastMes(MesDevices);
-                return;
-            case R.id.swich_puml:
-                if (!swPuml.isEnabled()) showToastMes(MesDevices);
-                return;
-            case R.id.seekBar_corner:
-                if (!swPuml.isEnabled()) showToastMes(MesDevices);
-                return;
+
+    private void showToastMes(String mes){
+        Toast.makeText(getActivity(), mes, Toast.LENGTH_SHORT).show();
+    }
+
+    public void notifyStatusDevices(Lamp lamp) {
+        boolean status = lamp.getState().getPowerOn();
+        if (lamp.getDetails().getLampType().name().equalsIgnoreCase(DEVICES_TYPE_PUMP)){
+            String statusResult = status ? "Tắt máy bơm" : "Bật máy bơm";
+            showToastMes(statusResult);
+        }
+        if (lamp.getDetails().getLampType().name().equalsIgnoreCase(DEVICES_TYPE_FAN)){
+            String statusResult = status ? "Tắt máy quạt" : "Bật máy quạt";
+            showToastMes(statusResult);
+            showToastMes(statusResult);
         }
     }
-
 
 }

@@ -25,15 +25,20 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import com.aigestudio.wheelpicker.WheelPicker;
 
-// TODO: 3/20/2017   Sroll seekbar
-public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+
+// TODO: 5/20/2017  control picker(lamp) in lamp info
+public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnClickListener , WheelPicker.OnItemSelectedListener{
 
     public final View stateView;
     public final DimmableItemInfoFragment parentFragment;
 
     public final Button presetsButton;
-    public final SeekBar brightnessSeekBar;
+    public final WheelPicker brightnessSeekBar;
     public final SeekBar hueSeekBar;
     public final SeekBar saturationSeekBar;
     public final SeekBar tempSeekBar;
@@ -41,6 +46,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     private final int viewColorTempMin;
     private final int viewColorTempSpan;
     private LampCapabilities capability;
+    private List<Integer> listData;
 
     public LampStateViewAdapter(View stateView, String tag, int colorTempMin, int colorTempSpan, DimmableItemInfoFragment parentFragment) {
         Log.i("LampStateViewAdapter" , "Tag " + tag );
@@ -49,10 +55,17 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
 
         presetsButton = (Button) stateView.findViewById(R.id.stateButton);
 
-        brightnessSeekBar = (SeekBar) stateView.findViewById(R.id.stateSliderBrightness);
+        brightnessSeekBar = (WheelPicker) stateView.findViewById(R.id.stateSliderBrightness);
+        listData = new ArrayList<>();
+        for (int i = 0; i <= 100;i++){
+            listData.add(i);
+        }
+        if( !(listData.size() < 100 ) )
+            brightnessSeekBar.setData(listData);
+
         brightnessSeekBar.setTag(tag);
         brightnessSeekBar.setSaveEnabled(false);
-        brightnessSeekBar.setOnSeekBarChangeListener(this);
+        brightnessSeekBar.setOnItemSelectedListener(this);
         stateView.findViewById(R.id.stateControlBrightness).setOnClickListener(this);
 
         hueSeekBar = (SeekBar) stateView.findViewById(R.id.stateSliderHue);
@@ -149,8 +162,9 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     public void setBrightness(int viewBrightness, boolean uniformBrightness) {
         Log.i("LampStateViewAdapter" , " " + viewBrightness);
         if (capability.dimmable >= LampCapabilities.SOME) {
-            brightnessSeekBar.setProgress(viewBrightness);
-            brightnessSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
+            brightnessSeekBar.setSelectedItemPosition(viewBrightness);
+            Log.i("LampState" , " " + brightnessSeekBar.getCurrentItemPosition());
+//            brightnessSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
 
             parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, viewBrightness, R.string.units_percent);
         }
@@ -224,8 +238,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             if (seekBar.getId() == R.id.stateSliderSaturation) {
                 saturationCheck();
             }
-
-            setTextViewValues(seekBar);
+            // // FIXME: 5/20/2017 edit change for stateSliderBrightness
+//            setTextViewValues(seekBar);
         }
     }
 
@@ -255,7 +269,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             if (capability.dimmable <= LampCapabilities.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_dimmable);
             }
-        } else if (viewID == R.id.stateControlHue) {
+        }
+        else if (viewID == R.id.stateControlHue) {
             if (capability.color <= LampCapabilities.NONE) {
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.no_support_color);
             } else if (saturationSeekBar.getProgress() == 0) {
@@ -272,6 +287,21 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
             	((SampleAppActivity)parentFragment.getActivity()).showToast(R.string.saturation_disable_temp);
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(WheelPicker picker, Object data, int position) {
+        switch (picker.getId()) {
+            case R.id.stateSliderBrightness:
+                int progress = ((Integer) data).intValue();
+                setTextValueBrightness(progress);
+                break;
+        }
+    }
+
+    private void setTextValueBrightness(int progress){
+        parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, progress, R.string.units_percent);
+        setBrightness(progress , true);
     }
 }
 

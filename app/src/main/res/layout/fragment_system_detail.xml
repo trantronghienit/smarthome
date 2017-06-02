@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <LinearLayout
 
         android:id="@+id/activity_main"
@@ -13,57 +14,58 @@
         tools:context="com.giang.myapp.MainActivity">
 
         <RelativeLayout
-            android:background="#f9f5f5"
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:layout_height="90dp"
+            android:background="#f9f5f5">
 
             <ImageView
                 android:id="@+id/nhietdo"
-                android:layout_marginLeft="22dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:background="@drawable/ic_temperature"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="17dp" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/ic_temperature" />
 
             <TextView
+                android:id="@+id/text2"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
+                android:layout_alignBottom="@+id/nhietdo"
                 android:layout_marginLeft="19dp"
                 android:layout_marginStart="19dp"
-                android:text="Nhiệt độ"
-                android:id="@+id/text2"
-                android:textColor="#433110"
-                android:layout_alignBottom="@+id/nhietdo"
+                android:layout_toEndOf="@+id/nhietdo"
                 android:layout_toRightOf="@+id/nhietdo"
-                android:layout_toEndOf="@+id/nhietdo" />
+                android:text="Nhiệt độ"
+                android:textColor="#433110" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignTop="@+id/nhietdo"
                 android:layout_alignLeft="@+id/text2"
-                android:layout_alignStart="@+id/text2">
+                android:layout_alignStart="@+id/text2"
+                android:layout_alignTop="@+id/nhietdo"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/txt_temperature"
                     android:layout_width="50dp"
                     android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
                     android:text="000"
-                    android:textSize="20dp"
                     android:textColor="#d22e2e"
-                    android:layout_marginTop="12dp" />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/text1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:text="Degrees"
-                    android:textSize="18dp"
                     android:textColor="#d22e2e"
-                    android:layout_marginTop="12dp"/>
+                    android:textSize="18dp" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -71,61 +73,62 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#978e8e"/>
+            android:background="#978e8e" />
 
         <RelativeLayout
-            android:background="#f9f5f5"
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:layout_height="90dp"
+            android:background="#f9f5f5">
 
             <ImageView
                 android:id="@+id/do_am"
-                android:layout_marginLeft="22dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-
-                android:background="@drawable/humidity"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
+
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="17dp" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/humidity" />
 
             <TextView
+                android:id="@+id/text3"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
+                android:layout_alignBottom="@+id/do_am"
                 android:layout_marginLeft="19dp"
                 android:layout_marginStart="19dp"
-                android:text="Độ ẩm"
-                android:id="@+id/text3"
-                android:textColor="#433110"
-                android:layout_alignBottom="@+id/do_am"
+                android:layout_toEndOf="@+id/do_am"
                 android:layout_toRightOf="@+id/do_am"
-                android:layout_toEndOf="@+id/do_am" />
+                android:text="Độ ẩm"
+                android:textColor="#433110" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignTop="@+id/do_am"
                 android:layout_alignLeft="@+id/text3"
-                android:layout_alignStart="@+id/text3">
+                android:layout_alignStart="@+id/text3"
+                android:layout_alignTop="@+id/do_am"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/txt_humidity"
                     android:layout_width="50dp"
                     android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
                     android:text="000"
-                    android:textSize="20dp"
                     android:textColor="#d22e2e"
-                    android:layout_marginTop="12dp" />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/text4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:text="Percent"
-                    android:textSize="18dp"
                     android:textColor="#d22e2e"
-                    android:layout_marginTop="12dp"/>
+                    android:textSize="18dp" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -133,7 +136,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#978e8e"/>
+            android:background="#978e8e" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -195,107 +198,189 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#978e8e"/>
+            android:background="#978e8e" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#f9f5f5">
 
+            <ImageView
+                android:id="@+id/imagelight_one"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/ic_lighting" />
+
+            <TextView
+                android:id="@+id/description_light1"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/imagelight_one"
+                android:layout_marginLeft="19dp"
+                android:layout_marginStart="19dp"
+                android:layout_toEndOf="@+id/imagelight_one"
+                android:layout_toRightOf="@+id/imagelight_one"
+                android:text="Cường Độ Sáng Tầng 1"
+                android:textColor="#433110" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignTop="@+id/imagelight_one"
+                android:layout_alignLeft="@+id/description_light1"
+                android:layout_alignStart="@+id/description_light1">
+
+                <TextView
+                    android:id="@+id/txt_group_light_one"
+                    android:layout_width="50dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:text="000"
+                    android:textColor="#d22e2e"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/text_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Brightness"
+                    android:textColor="#d22e2e"
+                    android:textSize="18dp" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Góc mở mái che "/>
-
-        <LinearLayout
-
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_height="1dp"
+            android:background="#978e8e" />
 
-            <RelativeLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f9f5f5">
+
+            <ImageView
+                android:id="@+id/imagelight_two"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:background="@drawable/ic_lighting"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="24dp" />
+
+            <TextView
+                android:id="@+id/text_description_two"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/imagelight_two"
+                android:layout_marginLeft="19dp"
+                android:layout_marginStart="19dp"
+                android:layout_toEndOf="@+id/imagelight_two"
+                android:layout_toRightOf="@+id/imagelight_two"
+                android:text="Cường Độ Sáng Tầng 2"
+                android:textColor="#433110" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentTop="true"
+                android:layout_alignLeft="@+id/text_description_two"
+                android:layout_alignStart="@+id/text_description_two">
+
+                <TextView
+                    android:id="@+id/txt_group_light_two"
+                    android:layout_width="50dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:text="000"
+                    android:textColor="#d22e2e"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/text_unit_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Brightness"
+                    android:textColor="#d22e2e"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#978e8e" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#f9f5f5">
+
+            <ImageView
+                android:id="@+id/imagelight"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/ic_lighting" />
+
+            <TextView
+                android:id="@+id/text_description_three"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="25dp"
-                android:layout_weight="1">
+                android:layout_marginStart="20dp"
+                android:text="Cường Độ Sáng Tầng 3"
+                android:textColor="#433110"
+                android:layout_alignBottom="@+id/imagelight"
+                android:layout_toRightOf="@+id/imagelight"
+                android:layout_toEndOf="@+id/imagelight" />
 
-                <com.example.circularseekbar.CircularSeekBar
-                    android:id="@+id/seekBar_corner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/hinh1"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignRight="@+id/hinh1"
-                    app:max="32"/>
-
-                <ImageView
-                    android:id="@+id/hinh1"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/iconmayhien" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="23dp"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/text_description_three"
+                android:layout_alignStart="@+id/text_description_three"
+                android:layout_alignTop="@+id/imagelight"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/hinh2"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/ic_fan" />
+                <TextView
+                    android:id="@+id/txt_group_light_three"
+                    android:layout_width="50dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:text="000"
+                    android:textColor="#d22e2e"
+                    android:textSize="20dp" />
 
-                <Switch
-                    android:enabled="false"
-                    android:id="@+id/swich_fan"
+                <TextView
+                    android:id="@+id/text_unit_three"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="25dp"
-                    android:checked="false"
-                    android:textOff="@string/switch_off"
-                    android:textOn="@string/switch_on" />
-            </RelativeLayout>
+                    android:layout_marginTop="12dp"
+                    android:text="Brightness"
+                    android:textColor="#d22e2e"
+                    android:textSize="18dp" />
+            </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="25dp"
-                android:layout_weight="1">
+        </RelativeLayout>
 
-                <Switch
-                    android:id="@+id/swich_puml"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:checked="false"
-                    android:enabled="false"
-                    android:textOff="@string/switch_off"
-                    android:textOn="@string/switch_on" />
 
-                <ImageView
-                    android:id="@+id/hinh3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="11dp"
-                    android:background="@drawable/ic_water" />
-
-            </RelativeLayout>
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>
 

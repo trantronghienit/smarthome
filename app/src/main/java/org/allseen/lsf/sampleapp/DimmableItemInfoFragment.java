@@ -86,7 +86,8 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
             ((SampleAppActivity)getActivity()).togglePower(itemType, key);
         } else if (viewID == R.id.statusLabelName || viewID == R.id.statusTextName) {
             onHeaderClick();
-        } else if (viewID == R.id.stateButton) {
+        }
+        else if (viewID == R.id.stateButton) {
             parent.showPresetsChildFragment(key, view.getTag().toString());
         }
     }
@@ -123,10 +124,8 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         setTextViewValue(statusView, R.id.statusTextName, name, 0);
 
         stateAdapter.setBrightness(color.getBrightness(), uniformity.brightness);
-        Log.i("Dimma" , "" + color.getBrightness());
         stateAdapter.setHue(color.getHue(), uniformity.hue);
         stateAdapter.setSaturation(color.getSaturation(), uniformity.saturation);
-        Log.i("Dimma" , "getSaturation " + color.getSaturation());
         stateAdapter.setColorTemp(color.getColorTemperature(), uniformity.colorTemp);
 
         // presets button

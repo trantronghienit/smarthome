@@ -29,4 +29,9 @@
     <color name="detail_text_dark">#595959</color>
     <color name="divider">#e0e0e0</color>
     <color name="color_indicator_border">#7d7d7d</color>
+
+    <!--picker-->
+    <color name="color_selected">#060405</color>
+    <color name="color_divider">#2b2a2a</color>
+    <color name="color_text_numberpicker">#2b2a2a</color>
 </resources>
