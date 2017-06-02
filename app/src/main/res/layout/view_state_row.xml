@@ -38,6 +38,7 @@
             android:textSize="@dimen/font_size_1" />
 
         <Button
+            android:visibility="gone"
             android:id="@id/stateButton"
             android:layout_width="wrap_content"
             android:maxWidth="200dp"
@@ -139,6 +140,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/stateLabelHue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,6 +173,7 @@
             android:orientation="horizontal" >
 
             <SeekBar
+                android:visibility="gone"
                 android:id="@+id/stateSliderHue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -243,6 +246,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/stateLabelColorTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -275,6 +279,7 @@
             android:orientation="horizontal" >
 
             <SeekBar
+                android:visibility="gone"
                 android:id="@+id/stateSliderColorTemp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

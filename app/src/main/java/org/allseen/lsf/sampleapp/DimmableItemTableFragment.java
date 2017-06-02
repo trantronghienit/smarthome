@@ -17,6 +17,7 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.ColorItem;
 import org.allseen.lsf.sdk.LampCapabilities;
+
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,13 +28,16 @@ import android.widget.SeekBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+
+
 public abstract class DimmableItemTableFragment
-    extends ScrollableTableFragment
-    implements
+        extends ScrollableTableFragment
+        implements
         View.OnClickListener,
         SeekBar.OnSeekBarChangeListener {
 
     protected abstract int getInfoButtonImageID();
+
     protected abstract Fragment getInfoFragment();
 
     public void addItems(ColorItem[] items) {
@@ -49,106 +53,119 @@ public abstract class DimmableItemTableFragment
     public void addItem(ColorItem item, int infoBG) {
         if (item != null) {
             insertDimmableItemRow(
-                getActivity(),
-                item.getId(),
-                item.getTag(),
-                item.isOn(),
-                item.getUniformity().power,
-                item.getName(),
-                item.getColor().getBrightness(),
-                item.getUniformity().brightness,
-                infoBG,
-                item.getCapability().dimmable >= LampCapabilities.SOME);
+                    getActivity(),
+                    item.getId(),
+                    item.getTag(),
+                    item.isOn(),
+                    item.getUniformity().power,
+                    item.getName(),
+                    item.getColor().getBrightness(),
+                    item.getUniformity().brightness,
+                    infoBG,
+                    item.getCapability().dimmable >= LampCapabilities.SOME);
             updateLoading();
         }
     }
 
     public <T> TableRow insertDimmableItemRow(Context context, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, int viewBrightness, boolean uniformBrightness, int infoBG) {
         return insertDimmableItemRow(
-            context,
-            (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-            itemID,
-            tag,
-            powerOn,
-            uniformPower,
-            name,
-            viewBrightness,
-            uniformBrightness,
-            infoBG,
-            true);
+                context,
+                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                itemID,
+                tag,
+                powerOn,
+                uniformPower,
+                name,
+                viewBrightness,
+                uniformBrightness,
+                infoBG,
+                true);
     }
 
     public <T> TableRow insertDimmableItemRow(Context context, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, int viewBrightness, boolean uniformBrightness, int infoBG, boolean enabled) {
         return insertDimmableItemRow(
-            context,
-            (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-            itemID,
-            tag,
-            powerOn,
-            uniformPower,
-            name,
-            viewBrightness,
-            uniformBrightness,
-            infoBG,
-            enabled);
+                context,
+                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                itemID,
+                tag,
+                powerOn,
+                uniformPower,
+                name,
+                viewBrightness,
+                uniformBrightness,
+                infoBG,
+                enabled);
     }
 
+    //todo : set for view fragment one
     public <T> TableRow insertDimmableItemRow(Context context, LayoutInflater inflater, String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower, String name, int viewBrightness, boolean uniformBrightness, int infoBG, boolean enabled) {
         Log.d(SampleAppActivity.TAG, "insertDimmableItemRow(): " + itemID + ", " + tag + ", " + name);
 
         final boolean isEnabled = enabled;
 
-        TableRow tableRow = (TableRow)table.findViewWithTag(itemID);
+        TableRow tableRow = (TableRow) table.findViewWithTag(itemID);
+
+        // nếu là thiết bị nhiệt độ độ ẩm thì ẩn đi
+        boolean isDevives = itemID.equalsIgnoreCase(SystemDetailFrament.ID_TEMPERATURE_HUMIDITY_DEVICES);
 
         if (tableRow == null) {
             tableRow = new TableRow(context);
+            if (isDevives) {
+                inflater.inflate(R.layout.view_dimmabble_item_row_other, tableRow);
+                ((TextView) tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
+            } else {
+                inflater.inflate(R.layout.view_dimmable_item_row, tableRow);
 
-            inflater.inflate(R.layout.view_dimmable_item_row, tableRow);
+                ImageButton powerButton = (ImageButton) tableRow.findViewById(R.id.dimmableItemButtonPower);
+                powerButton.setTag(itemID);
+                powerButton.setBackgroundResource(uniformPower ? (powerOn ? R.drawable.power_button_on : R.drawable.power_button_off) : R.drawable.power_button_mix);
+                powerButton.setOnClickListener(this);
 
-            ImageButton powerButton = (ImageButton)tableRow.findViewById(R.id.dimmableItemButtonPower);
-            powerButton.setTag(itemID);
-            powerButton.setBackgroundResource(uniformPower ? (powerOn ? R.drawable.power_button_on : R.drawable.power_button_off) : R.drawable.power_button_mix);
-            powerButton.setOnClickListener(this);
+                ((TextView) tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
-            ((TextView)tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
+                SeekBar seekBar = (SeekBar) tableRow.findViewById(R.id.dimmableItemRowSlider);
+                seekBar.setProgress(viewBrightness);
+                seekBar.setTag(itemID);
+                seekBar.setSaveEnabled(false);
+                seekBar.setOnSeekBarChangeListener(this);
+                seekBar.setThumb(getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
+                seekBar.setEnabled(isEnabled);
 
-            SeekBar seekBar = (SeekBar)tableRow.findViewById(R.id.dimmableItemRowSlider);
-            seekBar.setProgress(viewBrightness);
-            seekBar.setTag(itemID);
-            seekBar.setSaveEnabled(false);
-            seekBar.setOnSeekBarChangeListener(this);
-            seekBar.setThumb(getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
-            seekBar.setEnabled(isEnabled);
 
-            ImageButton infoButton = (ImageButton)tableRow.findViewById(R.id.dimmableItemButtonMore);
-            infoButton.setImageResource(getInfoButtonImageID());
-            infoButton.setTag(itemID);
-            infoButton.setOnClickListener(this);
-            if (infoBG != 0) {
-                infoButton.setBackgroundColor(infoBG);
+                ImageButton infoButton = (ImageButton) tableRow.findViewById(R.id.dimmableItemButtonMore);
+                infoButton.setImageResource(getInfoButtonImageID());
+                infoButton.setTag(itemID);
+//            infoButton.setOnClickListener(this);
+                if (infoBG != 0) {
+                    infoButton.setBackgroundColor(infoBG);
+                }
             }
-
             tableRow.setTag(itemID);
             TableSorter.insertSortedTableRow(table, tableRow, tag);
         } else {
-            ((ImageButton)tableRow.findViewById(R.id.dimmableItemButtonPower)).setBackgroundResource(uniformPower ? (powerOn ? R.drawable.power_button_on : R.drawable.power_button_off) : R.drawable.power_button_mix);
-            ((TextView)tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
+            if (isDevives) {
+//                inflater.inflate(R.layout.view_dimmabble_item_row_other, tableRow);
+                ((TextView) tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
+                tableRow.setClickable(false);
 
-            SeekBar seekBar = (SeekBar)tableRow.findViewById(R.id.dimmableItemRowSlider);
-            seekBar.setProgress(viewBrightness);
-            seekBar.setThumb(getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
-            seekBar.setEnabled(isEnabled);
+            }else {
+                ((ImageButton) tableRow.findViewById(R.id.dimmableItemButtonPower)).setBackgroundResource(uniformPower ? (powerOn ? R.drawable.power_button_on : R.drawable.power_button_off) : R.drawable.power_button_mix);
+                ((TextView) tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
-            if (infoBG != 0) {
-                ((ImageButton)tableRow.findViewById(R.id.dimmableItemButtonMore)).setBackgroundColor(infoBG);
+                SeekBar seekBar = (SeekBar) tableRow.findViewById(R.id.dimmableItemRowSlider);
+                seekBar.setProgress(viewBrightness);
+                seekBar.setThumb(getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
+                seekBar.setEnabled(isEnabled);
+
+                if (infoBG != 0) {
+                    ((ImageButton) tableRow.findViewById(R.id.dimmableItemButtonMore)).setBackgroundColor(infoBG);
+                }
             }
-
             TableSorter.updateSortedTableRow(table, tableRow, tag);
+            tableRow.setClickable(true);
+            tableRow.setOnClickListener(this);
         }
-
-        tableRow.setClickable(true);
-        tableRow.setOnClickListener(this);
-        ((SampleAppActivity)getActivity()).setTabTitles();
+        ((SampleAppActivity) getActivity()).setTabTitles();
         return tableRow;
     }
 
@@ -160,11 +177,11 @@ public abstract class DimmableItemTableFragment
 
         if (parent != null) {
             if (buttonID == R.id.dimmableItemButtonPower) {
-                ((SampleAppActivity)getActivity()).togglePower(type, button.getTag().toString());
+                ((SampleAppActivity) getActivity()).togglePower(type, button.getTag().toString());
             } else if (buttonID == R.id.dimmableItemButtonMore) {
-                ((SampleAppActivity)getActivity()).onItemButtonMore(parent, type, button, button.getTag().toString(), null, true);
-            } else if (!((SeekBar)button.findViewById(R.id.dimmableItemRowSlider)).isEnabled()) {
-            	((SampleAppActivity)getActivity()).showToast(R.string.no_support_dimmable);
+                ((SampleAppActivity) getActivity()).onItemButtonMore(parent, type, button, button.getTag().toString(), null, true);
+            } else if (!((SeekBar) button.findViewById(R.id.dimmableItemRowSlider)).isEnabled()) {
+                ((SampleAppActivity) getActivity()).showToast(R.string.no_support_dimmable);
             }
         }
     }
@@ -185,7 +202,7 @@ public abstract class DimmableItemTableFragment
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         if (parent != null) {
-            ((SampleAppActivity)getActivity()).setBrightness(type, seekBar.getTag().toString(), seekBar.getProgress());
+            ((SampleAppActivity) getActivity()).setBrightness(type, seekBar.getTag().toString(), seekBar.getProgress());
         }
     }
 }

@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+// todo Fragment one
 public class LampsTableFragment extends DimmableItemTableFragment {
 
     public LampsTableFragment() {

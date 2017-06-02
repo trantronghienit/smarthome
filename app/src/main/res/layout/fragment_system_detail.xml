@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.giang.myapp.MainActivity">
+
+        <RelativeLayout
+            android:background="#f9f5f5"
+            android:layout_width="match_parent"
+            android:layout_height="90dp">
+
+            <ImageView
+                android:id="@+id/nhietdo"
+                android:layout_marginLeft="22dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/ic_temperature"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="17dp" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginStart="19dp"
+                android:text="Nhiệt độ"
+                android:id="@+id/text2"
+                android:textColor="#433110"
+                android:layout_alignBottom="@+id/nhietdo"
+                android:layout_toRightOf="@+id/nhietdo"
+                android:layout_toEndOf="@+id/nhietdo" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignTop="@+id/nhietdo"
+                android:layout_alignLeft="@+id/text2"
+                android:layout_alignStart="@+id/text2">
+                <TextView
+                    android:id="@+id/txt_temperature"
+                    android:layout_width="50dp"
+                    android:layout_height="23dp"
+                    android:text="000"
+                    android:textSize="20dp"
+                    android:textColor="#d22e2e"
+                    android:layout_marginTop="12dp" />
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Degrees"
+                    android:textSize="18dp"
+                    android:textColor="#d22e2e"
+                    android:layout_marginTop="12dp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#978e8e"/>
+
+        <RelativeLayout
+            android:background="#f9f5f5"
+            android:layout_width="match_parent"
+            android:layout_height="90dp">
+
+            <ImageView
+                android:id="@+id/do_am"
+                android:layout_marginLeft="22dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+
+                android:background="@drawable/humidity"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="17dp" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginStart="19dp"
+                android:text="Độ ẩm"
+                android:id="@+id/text3"
+                android:textColor="#433110"
+                android:layout_alignBottom="@+id/do_am"
+                android:layout_toRightOf="@+id/do_am"
+                android:layout_toEndOf="@+id/do_am" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignTop="@+id/do_am"
+                android:layout_alignLeft="@+id/text3"
+                android:layout_alignStart="@+id/text3">
+                <TextView
+                    android:id="@+id/txt_humidity"
+                    android:layout_width="50dp"
+                    android:layout_height="23dp"
+                    android:text="000"
+                    android:textSize="20dp"
+                    android:textColor="#d22e2e"
+                    android:layout_marginTop="12dp" />
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Percent"
+                    android:textSize="18dp"
+                    android:textColor="#d22e2e"
+                    android:layout_marginTop="12dp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#978e8e"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="#f9f5f5">
+
+            <ImageView
+                android:id="@+id/ph"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginStart="17dp"
+                android:background="@drawable/ic_ph" />
+
+            <TextView
+                android:id="@+id/text9"
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/ph"
+                android:layout_marginLeft="19dp"
+                android:layout_marginStart="19dp"
+                android:layout_toEndOf="@+id/ph"
+                android:layout_toRightOf="@+id/ph"
+                android:text="Độ pH"
+                android:textColor="#433110" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/text9"
+                android:layout_alignStart="@+id/text9"
+                android:layout_alignTop="@+id/ph"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_ph"
+                    android:layout_width="50dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="12dp"
+                    android:text="000"
+                    android:textColor="#d22e2e"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/text8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="pH"
+                    android:textColor="#d22e2e"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#978e8e"/>
+
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Góc mở mái che "/>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_weight="1">
+
+                <com.example.circularseekbar.CircularSeekBar
+                    android:id="@+id/seekBar_corner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/hinh1"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignRight="@+id/hinh1"
+                    app:max="32"/>
+
+                <ImageView
+                    android:id="@+id/hinh1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/iconmayhien" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="23dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/hinh2"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ic_fan" />
+
+                <Switch
+                    android:enabled="false"
+                    android:id="@+id/swich_fan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="25dp"
+                    android:checked="false"
+                    android:textOff="@string/switch_off"
+                    android:textOn="@string/switch_on" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="25dp"
+                android:layout_weight="1">
+
+                <Switch
+                    android:id="@+id/swich_puml"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:checked="false"
+                    android:enabled="false"
+                    android:textOff="@string/switch_off"
+                    android:textOn="@string/switch_on" />
+
+                <ImageView
+                    android:id="@+id/hinh3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/ic_water" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+

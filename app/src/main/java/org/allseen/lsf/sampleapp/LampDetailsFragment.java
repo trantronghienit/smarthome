@@ -21,6 +21,7 @@ import org.allseen.lsf.sdk.LampDetails;
 import org.allseen.lsf.sdk.LampMake;
 import org.allseen.lsf.sdk.LightingDirector;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,7 +34,9 @@ public class LampDetailsFragment extends PageFrameChildFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lamp_details, container, false);
 
+        // TODO: 3/20/2017 get id devices
         Lamp lamp = LightingDirector.get().getLamp(key);
+        Log.i("LampId", ""+ lamp.getId());
 
         if (view != null) {
             updateDetailFields(lamp);
@@ -62,6 +65,14 @@ public class LampDetailsFragment extends PageFrameChildFragment {
         setTextViewValue(view, R.id.lampDetailsTextLamp, lampDetails != null ? lampDetails.getLampType() : null, 0);
         setTextViewValue(view, R.id.lampDetailsTextBase, lampDetails != null ? lampDetails.getLampBaseType() : null, 0);
         setTextViewValue(view, R.id.lampDetailsTextBeam, lampDetails != null ? lampDetails.getLampBeamAngle() : 0, 0);
+
+        // TODO: get info devices
+        Log.i("LamDetail" , "Model " + lampDetails.getModel().name() +
+                "\tgetType " + lampDetails.getType().name()
+                + "\tgetLampType " + lampDetails.getLampType().name()
+                + "\tgetLampBaseType " + lampDetails.getLampBaseType().name()
+                + "\tgetLampBeamAngle " + lampDetails.getLampBeamAngle()
+        );
 
         setTextViewValue(view, R.id.lampDetailsTextDimmable, lampDetails != null ? lampDetails.isDimmable() : false, 0);
         setTextViewValue(view, R.id.lampDetailsTextHasColor, lampDetails != null ? lampDetails.hasColor() : false, 0);

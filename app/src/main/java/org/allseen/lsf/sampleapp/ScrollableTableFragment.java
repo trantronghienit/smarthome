@@ -15,6 +15,7 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class ScrollableTableFragment extends PageFrameChildFragment {
 
             View loadingView = layout.findViewById(R.id.scrollLoadingView);
 
+            @SuppressLint("WifiManagerLeak")
             String ssid = ((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSSID();
 
             if (ssid == null) {

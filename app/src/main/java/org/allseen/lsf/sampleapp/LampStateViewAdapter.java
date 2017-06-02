@@ -17,12 +17,16 @@ package org.allseen.lsf.sampleapp;
 
 import org.allseen.lsf.sdk.LampCapabilities;
 
+import android.content.Loader;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+
+// TODO: 3/20/2017   Sroll seekbar
 public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickListener {
 
     public final View stateView;
@@ -39,6 +43,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     private LampCapabilities capability;
 
     public LampStateViewAdapter(View stateView, String tag, int colorTempMin, int colorTempSpan, DimmableItemInfoFragment parentFragment) {
+        Log.i("LampStateViewAdapter" , "Tag " + tag );
         this.stateView = stateView;
         this.parentFragment = parentFragment;
 
@@ -142,6 +147,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
     }
 
     public void setBrightness(int viewBrightness, boolean uniformBrightness) {
+        Log.i("LampStateViewAdapter" , " " + viewBrightness);
         if (capability.dimmable >= LampCapabilities.SOME) {
             brightnessSeekBar.setProgress(viewBrightness);
             brightnessSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
@@ -179,6 +185,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, OnClickLis
         }
     }
 
+    // todo saturation
     private void saturationCheck() {
         if (saturationSeekBar.getProgress() == 0) {
             hueSeekBar.setEnabled(false);

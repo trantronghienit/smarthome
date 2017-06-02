@@ -21,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+// TODO: 3/21/2017 ViewPager for app
 public class SampleAppViewPager extends ViewPager {
 
     SampleAppActivity activity;

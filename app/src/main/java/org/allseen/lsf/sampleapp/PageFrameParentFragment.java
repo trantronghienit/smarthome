@@ -30,6 +30,7 @@ public abstract class PageFrameParentFragment extends Fragment {
     public static final String CHILD_TAG_PRESETS = "PRESETS";
     public static final String CHILD_TAG_SETTINGS = "SETTINGS";
     public static final String CHILD_TAG_TEXT = "TEXT";
+    protected String key;
 
     public static String TAG;
 
@@ -45,6 +46,10 @@ public abstract class PageFrameParentFragment extends Fragment {
 
     public PageFrameChildFragment createTextChildFragment() {
         return new TextFragment();
+    }
+
+    protected void setKey(String key){
+        this.key = key;
     }
 
     public int onBackPressed() {

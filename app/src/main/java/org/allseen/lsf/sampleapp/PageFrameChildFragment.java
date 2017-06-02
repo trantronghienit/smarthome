@@ -41,6 +41,10 @@ public class PageFrameChildFragment extends Fragment {
         this.key2 = key2 != null ? key2 : "";
     }
 
+    public String getKey() {
+        return key;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

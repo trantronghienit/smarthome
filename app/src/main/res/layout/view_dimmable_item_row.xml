@@ -22,9 +22,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp" >
+        >
 
         <ImageButton
             android:id="@+id/dimmableItemButtonPower"
@@ -49,9 +47,9 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/dimmableItemButtonMore"
+            android:ellipsize="end"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:ellipsize="end"
             android:textColor="@color/actionbar_text"
             android:textSize="@dimen/font_size_1" />
 
@@ -76,12 +74,9 @@
             android:id="@+id/dimmableItemButtonMore"
             android:layout_width="44dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
             android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/light_status_icon" />
 

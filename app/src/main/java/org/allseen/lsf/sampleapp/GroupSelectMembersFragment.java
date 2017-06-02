@@ -95,7 +95,6 @@ public class GroupSelectMembersFragment extends SelectMembersFragment {
         return R.string.create_group;
     }
 
-    //TODO-REF Common
     protected boolean isAddMode() {
         return GroupInfoFragment.pendingGroupID == null || GroupInfoFragment.pendingGroupID.isEmpty();
     }

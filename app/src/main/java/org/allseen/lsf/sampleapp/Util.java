@@ -83,7 +83,6 @@ public class Util {
         return createMemberNamesString(activity, groupIDs, lampIDs, separator, R.string.member_group_not_found, R.string.member_lamp_not_found, noMembersStringID);
     }
 
-    // TODO-REF combine with next createMemberNamesString()?
     public static String formatMemberNamesString(SampleAppActivity activity, String[] lampIDs, String[] groupIDs, MemberNamesOptions options, int maxCount, String noMembers) {
         List<String> groupNames = new ArrayList<String>();
         List<String> lampNames = new ArrayList<String>();

@@ -18,5 +18,5 @@ package org.allseen.lsf.sampleapp;
 import android.content.DialogInterface;
 
 public interface ItemNameAdapter extends DialogInterface.OnClickListener {
-    public String getCurrentName();
+    String getCurrentName();
 }

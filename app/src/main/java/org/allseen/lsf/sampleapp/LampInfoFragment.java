@@ -21,6 +21,7 @@ import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,12 +68,13 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
             stateAdapter.setCapability(lamp.getCapability());
             super.updateInfoFields(lamp);
 
+
             LampParameters lampParams = lamp.getParameters();
             setTextViewValue(view, R.id.lampInfoTextLumens, lampParams.getLumens(), 0);
             setTextViewValue(view, R.id.lampInfoTextEnergy, lampParams.getEnergyUsageMilliwatts(), R.string.units_mw);
         }
     }
-
+    // TODO: 3/20/2017  fragment_lamp_info
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_lamp_info;

@@ -23,6 +23,7 @@ import org.allseen.lsf.sdk.MyLampState;
 
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public abstract class DimmableItemInfoFragment extends PageFrameChildFragment implements View.OnClickListener {
+
     public static final String STATE_ITEM_TAG = "STATE";
     public static int defaultIndicatorColor = 00000000;
 
@@ -69,6 +71,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         presetsButton.setClickable(true);
         presetsButton.setOnClickListener(this);
 
+        // TODO: 3/20/2017  set adapter propertion
         // state adapter
         stateAdapter = new LampStateViewAdapter(stateView, getLampStateViewAdapterTag(), getColorTempMin(), getColorTempSpan(), this);
 
@@ -120,8 +123,10 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         setTextViewValue(statusView, R.id.statusTextName, name, 0);
 
         stateAdapter.setBrightness(color.getBrightness(), uniformity.brightness);
+        Log.i("Dimma" , "" + color.getBrightness());
         stateAdapter.setHue(color.getHue(), uniformity.hue);
         stateAdapter.setSaturation(color.getSaturation(), uniformity.saturation);
+        Log.i("Dimma" , "getSaturation " + color.getSaturation());
         stateAdapter.setColorTemp(color.getColorTemperature(), uniformity.colorTemp);
 
         // presets button

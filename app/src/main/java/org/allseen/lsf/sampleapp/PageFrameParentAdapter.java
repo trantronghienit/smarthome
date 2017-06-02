@@ -20,9 +20,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+// todo change number tab
 public class PageFrameParentAdapter extends FragmentPagerAdapter {
 
     private final Context context;
+    private final int TAB_COUNT = 2;
 
     public PageFrameParentAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -32,26 +34,26 @@ public class PageFrameParentAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return TAB_COUNT;
     }
 
     @Override
     public Fragment getItem(int index) {
         PageFrameParentFragment parentFragment;
-
         if (index == 0) {
             parentFragment = new LampsPageFragment();
         } else if (index == 1) {
-            parentFragment = new GroupsPageFragment();
-        } else if (index == 2) {
-            parentFragment = new ScenesPageFragment();
+            parentFragment = new SystemDetailFrament();
         } else {
             parentFragment = null;
         }
-
+//        else if (index == 2) {
+//            parentFragment = new ScenesPageFragment();
+//        }
         return parentFragment;
     }
 
+    // get title page
     @Override
     public CharSequence getPageTitle(int index) {
         return ((SampleAppActivity) context).getPageTitle(index);

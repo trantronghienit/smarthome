@@ -88,6 +88,7 @@ public class SampleAppActivity extends FragmentActivity implements
         ActionBar.TabListener,
         PopupMenu.OnMenuItemClickListener,
         AllLightingItemListener {
+
     public static final String TAG = "LSFSampleApp";
     public static final String TAG_TRACE = "LSFSampleApp########";
     public static final String LANGUAGE = "en";
@@ -170,23 +171,23 @@ public class SampleAppActivity extends FragmentActivity implements
 
         LightingDirector.get().addListener(this);
         LightingDirector.get().start(
-            "SampleApp",
-            new LightingSystemQueue() {
-                @Override
-                public void post(Runnable r) {
-                    handler.post(r);
-                }
+                "SampleApp",
+                new LightingSystemQueue() {
+                    @Override
+                    public void post(Runnable r) {
+                        handler.post(r);
+                    }
 
-                @Override
-                public void postDelayed(Runnable r, int delay) {
-                    handler.postDelayed(r, delay);
-                }
+                    @Override
+                    public void postDelayed(Runnable r, int delay) {
+                        handler.postDelayed(r, delay);
+                    }
 
-                @Override
-                public void stop() {
-                    // Currently nothing to do
-                }
-            });
+                    @Override
+                    public void stop() {
+                        // Currently nothing to do
+                    }
+                });
 
         // Handle plugins and modules (optional features)
         // We initialize the dashboard plugin first to avoid an apparent
@@ -202,6 +203,7 @@ public class SampleAppActivity extends FragmentActivity implements
         controllerService = LightingController.get();
         controllerService.init(new SampleAppControllerConfiguration(
                 getApplicationContext().getFileStreamPath("").getAbsolutePath(), getApplicationContext()));
+
     }
 
     @Override
@@ -268,21 +270,22 @@ public class SampleAppActivity extends FragmentActivity implements
         return wifiNetworkInfo.isConnected() || isWifiApEnabled;
     }
 
+
     private boolean actionBarHasAdd() {
         boolean hasAdd = false;
-        int tabIndex = viewPager.getCurrentItem();
-
-        if (tabIndex != 0) {
-            if (tabIndex == 1) {
-                // Groups tab
-                hasAdd = (LightingDirector.get().getGroupCount() < LightingDirector.MAX_GROUPS);
-            } else if (tabIndex == 2) {
-                // Scenes tab
-                hasAdd =
-                    (LightingDirector.get().getSceneCount() < LightingDirector.MAX_SCENES) ||
-                    (LightingDirector.get().getMasterSceneCount() < LightingDirector.MAX_MASTER_SCENES);
-            }
-        }
+//        int tabIndex = viewPager.getCurrentItem();
+//
+//        if (tabIndex != 0) {
+//            if (tabIndex == 1) {
+//                // Groups tab
+//                hasAdd = (LightingDirector.get().getGroupCount() < LightingDirector.MAX_GROUPS);
+//            } else if (tabIndex == 2) {
+//                // Scenes tab
+//                hasAdd =
+//                        (LightingDirector.get().getSceneCount() < LightingDirector.MAX_SCENES) ||
+//                                (LightingDirector.get().getMasterSceneCount() < LightingDirector.MAX_MASTER_SCENES);
+//            }
+//        }
 
         return hasAdd;
     }
@@ -295,12 +298,11 @@ public class SampleAppActivity extends FragmentActivity implements
         addActionMenuItem = menu.findItem(R.id.action_add);
         nextActionMenuItem = menu.findItem(R.id.action_next);
         doneActionMenuItem = menu.findItem(R.id.action_done);
-        settingsActionMenuItem  = menu.findItem(R.id.action_settings);
+        settingsActionMenuItem = menu.findItem(R.id.action_settings);
 
         if (pageFrameParent == null) {
             updateActionBar(actionBarHasAdd(), false, false, true);
         }
-
         return true;
     }
 
@@ -342,7 +344,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 if (pageFrameParent != null) {
                     pageFrameParent.onActionAdd();
                 } else if (viewPager.getCurrentItem() == 1) {
-                    doAddGroup((GroupsPageFragment)(getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)));
+                    doAddGroup((GroupsPageFragment) (getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)));
                 } else {
                     showSceneAddPopup(findViewById(R.id.action_add));
                 }
@@ -546,7 +548,6 @@ public class SampleAppActivity extends FragmentActivity implements
                 @Override
                 public void run() {
                     Log.d(SampleAppActivity.TAG, "wifi disconnected");
-
                     postInForeground(new Runnable() {
                         @Override
                         public void run() {
@@ -632,17 +633,18 @@ public class SampleAppActivity extends FragmentActivity implements
     public void showItemNameDialog(int titleID, ItemNameAdapter adapter) {
         if (adapter != null) {
             View view = getLayoutInflater().inflate(R.layout.view_dialog_item_name, null, false);
-            EditText nameText = (EditText)view.findViewById(R.id.itemNameText);
+            EditText nameText = (EditText) view.findViewById(R.id.itemNameText);
             AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setTitle(titleID)
-                .setView(view)
-                .setPositiveButton(R.string.dialog_ok, adapter)
-                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }})
-                .create();
+                    .setTitle(titleID)
+                    .setView(view)
+                    .setPositiveButton(R.string.dialog_ok, adapter)
+                    .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                    .create();
 
             nameText.addTextChangedListener(new ItemNameDialogTextWatcher(alertDialog, nameText));
             nameText.setText(adapter.getCurrentName());
@@ -669,7 +671,8 @@ public class SampleAppActivity extends FragmentActivity implements
                                 component.delete();
                             }
                         }
-                    }});
+                    }
+                });
             } else {
                 String memberNames = MemberNamesString.format(this, dependents, MemberNamesOptions.en, 3, "");
                 String message = String.format(getString(errorMessageID), itemName, memberNames);
@@ -682,12 +685,12 @@ public class SampleAppActivity extends FragmentActivity implements
     private void showConfirmDeleteSceneElementDialog(final String sceneElementID) {
         if (sceneElementID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getSceneElement(sceneElementID),
-                null,
-                R.string.menu_scene_element_delete,
-                R.string.label_scene_element,
-                R.string.error_dependency_scene_element_title,
-                R.string.error_dependency_scene_element_text);
+                    LightingDirector.get().getSceneElement(sceneElementID),
+                    null,
+                    R.string.menu_scene_element_delete,
+                    R.string.label_scene_element,
+                    R.string.error_dependency_scene_element_title,
+                    R.string.error_dependency_scene_element_text);
         }
     }
 
@@ -696,7 +699,7 @@ public class SampleAppActivity extends FragmentActivity implements
         List<DeletableItem> sceneComponents = new ArrayList<DeletableItem>();
 
         if (basicScene instanceof SceneV2) {
-            for (SceneElement sceneElement : ((SceneV2)basicScene).getSceneElements()) {
+            for (SceneElement sceneElement : ((SceneV2) basicScene).getSceneElements()) {
                 sceneComponents.add(sceneElement);
                 sceneComponents.add(sceneElement.getEffect());
             }
@@ -704,16 +707,16 @@ public class SampleAppActivity extends FragmentActivity implements
 
         if (basicSceneID != null) {
             showConfirmDeleteItemDialog(
-                basicScene,
-                sceneComponents,
-                R.string.menu_basic_scene_delete,
-                R.string.label_basic_scene,
-                R.string.error_dependency_scene_title,
-                R.string.error_dependency_scene_text);
+                    basicScene,
+                    sceneComponents,
+                    R.string.menu_basic_scene_delete,
+                    R.string.label_basic_scene,
+                    R.string.error_dependency_scene_title,
+                    R.string.error_dependency_scene_text);
         }
     }
 
-    private void doDeleteSceneElement(String basicSceneID, String elementID ) {
+    private void doDeleteSceneElement(String basicSceneID, String elementID) {
         if (BasicSceneV2InfoFragment.pendingSceneV2 != null) {
             BasicSceneV2InfoFragment.pendingSceneV2.doDeleteSceneElement(elementID);
         }
@@ -726,60 +729,60 @@ public class SampleAppActivity extends FragmentActivity implements
     private void showConfirmDeleteMasterSceneDialog(final String masterSceneID) {
         if (masterSceneID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getMasterScene(masterSceneID),
-                null,
-                R.string.menu_master_scene_delete,
-                R.string.label_master_scene,
-                0,
-                0);
+                    LightingDirector.get().getMasterScene(masterSceneID),
+                    null,
+                    R.string.menu_master_scene_delete,
+                    R.string.label_master_scene,
+                    0,
+                    0);
         }
     }
 
     private void showConfirmDeleteGroupDialog(final String groupID) {
         if (groupID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getGroup(groupID),
-                null,
-                R.string.menu_group_delete,
-                R.string.label_group,
-                R.string.error_dependency_group_title,
-                R.string.error_dependency_group_text);
+                    LightingDirector.get().getGroup(groupID),
+                    null,
+                    R.string.menu_group_delete,
+                    R.string.label_group,
+                    R.string.error_dependency_group_title,
+                    R.string.error_dependency_group_text);
         }
     }
 
     private void showConfirmDeletePresetDialog(final String presetID) {
         if (presetID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getPreset(presetID),
-                null,
-                R.string.menu_preset_delete,
-                R.string.label_preset,
-                R.string.error_dependency_preset_title,
-                R.string.error_dependency_preset_text);
+                    LightingDirector.get().getPreset(presetID),
+                    null,
+                    R.string.menu_preset_delete,
+                    R.string.label_preset,
+                    R.string.error_dependency_preset_title,
+                    R.string.error_dependency_preset_text);
         }
     }
 
     private void showConfirmDeleteTransitionEffectDialog(final String transitionEffectID) {
         if (transitionEffectID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getTransitionEffect(transitionEffectID),
-                null,
-                R.string.menu_preset_delete,
-                R.string.label_transition_effect,
-                R.string.error_dependency_transition_effect_title,
-                R.string.error_dependency_transition_effect_text);
+                    LightingDirector.get().getTransitionEffect(transitionEffectID),
+                    null,
+                    R.string.menu_preset_delete,
+                    R.string.label_transition_effect,
+                    R.string.error_dependency_transition_effect_title,
+                    R.string.error_dependency_transition_effect_text);
         }
     }
 
     private void showConfirmDeletePulseEffectDialog(final String pulseEffectID) {
         if (pulseEffectID != null) {
             showConfirmDeleteItemDialog(
-                LightingDirector.get().getPulseEffect(pulseEffectID),
-                null,
-                R.string.menu_pulse_effect_delete,
-                R.string.label_pulse_effect,
-                R.string.error_dependency_pulse_effect_title,
-                R.string.error_dependency_pulse_effect_text);
+                    LightingDirector.get().getPulseEffect(pulseEffectID),
+                    null,
+                    R.string.menu_pulse_effect_delete,
+                    R.string.label_pulse_effect,
+                    R.string.error_dependency_pulse_effect_title,
+                    R.string.error_dependency_pulse_effect_text);
         }
     }
 
@@ -790,19 +793,20 @@ public class SampleAppActivity extends FragmentActivity implements
         String label = getResources().getString(labelID);
         String text = String.format(format, label, itemName);
 
-        ((TextView)view.findViewById(R.id.confirmDeleteText)).setText(text);
+        ((TextView) view.findViewById(R.id.confirmDeleteText)).setText(text);
 
         new AlertDialog.Builder(this)
-            .setTitle(titleID)
-            .setView(view)
-            .setPositiveButton(R.string.dialog_ok, onOKListener)
-            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }})
-            .create()
-            .show();
+                .setTitle(titleID)
+                .setView(view)
+                .setPositiveButton(R.string.dialog_ok, onOKListener)
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+                .create()
+                .show();
     }
 
     private void showPositiveErrorDialog(int titleID, String message) {
@@ -814,13 +818,15 @@ public class SampleAppActivity extends FragmentActivity implements
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
-            };
+            }
+
+            ;
         });
         alertDialogBuilder.show();
     }
 
     private void showSceneInfo(ScenesPageFragment.Mode mode) {
-        ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+        ScenesPageFragment scenesPageFragment = (ScenesPageFragment) getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
         scenesPageFragment.setMode(mode);
 
         if (scenesPageFragment.isBasicModeV1()) {
@@ -830,7 +836,7 @@ public class SampleAppActivity extends FragmentActivity implements
             Scene scene = LightingDirector.get().getScene(popupItemID);
 
             if (scene instanceof SceneV2) {
-                BasicSceneV2InfoFragment.pendingSceneV2 = new PendingSceneV2((SceneV2)scene);
+                BasicSceneV2InfoFragment.pendingSceneV2 = new PendingSceneV2((SceneV2) scene);
             } else {
                 Log.e(SampleAppActivity.TAG, "Invalid scene type for ID " + popupItemID);
             }
@@ -966,7 +972,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 pageTag = ScenesPageFragment.TAG;
             }
 
-            pageFrameParent = (PageFrameParentFragment)getSupportFragmentManager().findFragmentByTag(pageTag);
+            pageFrameParent = (PageFrameParentFragment) getSupportFragmentManager().findFragmentByTag(pageTag);
         }
 
         pageFrameParent.showSettingsChildFragment("");
@@ -1042,7 +1048,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         switch (item.getItemId()) {
             case R.id.group_info:
-                showInfoFragment((GroupsPageFragment)(getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)), popupItemID);
+                showInfoFragment((GroupsPageFragment) (getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)), popupItemID);
                 break;
             case R.id.group_delete:
                 showConfirmDeleteGroupDialog(popupItemID);
@@ -1084,10 +1090,10 @@ public class SampleAppActivity extends FragmentActivity implements
                 showConfirmDeletePulseEffectDialog(popupItemID);
                 break;
             case R.id.scene_add_basic:
-                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.BASIC);
+                doAddScene((ScenesPageFragment) (getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.BASIC);
                 break;
             case R.id.scene_add_master:
-                doAddScene((ScenesPageFragment)(getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.MASTER);
+                doAddScene((ScenesPageFragment) (getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG)), ScenesPageFragment.Mode.MASTER);
                 break;
             default:
                 result = false;
@@ -1223,8 +1229,7 @@ public class SampleAppActivity extends FragmentActivity implements
             if (colorItem != null) {
                 Color color = colorItem.getColor();
                 int oldViewBrightness = color.getBrightness();
-
-                Log.d(SampleAppActivity.TAG, "Set brightness for " + colorItem.getName() + " to " + newViewBrightness);
+                Log.d("SampleAppActivity", "Set brightness for " + colorItem.getName() + " to " + oldViewBrightness);
 
                 colorItem.setBrightness(newViewBrightness);
 
@@ -1288,6 +1293,7 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
+    @SuppressLint("StringFormatInvalid")
     public CharSequence getPageTitle(int index) {
         LightingDirector director = LightingDirector.get();
         Controller controller = director.getLeadController();
@@ -1300,32 +1306,32 @@ public class SampleAppActivity extends FragmentActivity implements
             int lampCount = director.getLampCount();
             title = getString(R.string.title_tab_lamps, connected ? lampCount : 0).toUpperCase(locale);
         } else if (index == 1) {
-            int groupCount = director.getGroupCount();
-            title = getString(R.string.title_tab_groups, connected ? groupCount : 0).toUpperCase(locale);
-        } else if (index == 2) {
-            int basicSceneCount = director.getSceneCount();
-            int masterSceneCount =  director.getMasterSceneCount();
-            title = getString(R.string.title_tab_scenes, connected ? basicSceneCount + masterSceneCount : 0).toUpperCase(locale);
-        } else {
+            title = getString(R.string.title_tab_system_detail).toUpperCase(locale);
+        }
+//        else if (index == 2) {
+//            int basicSceneCount = director.getSceneCount();
+//            int masterSceneCount = director.getMasterSceneCount();
+//            title = getString(R.string.title_tab_scenes, connected ? basicSceneCount + masterSceneCount : 0).toUpperCase(locale);
+//        }
+        else {
             title = null;
         }
-
         return title;
     }
 
-    public void showToast(int resId){
+    public void showToast(int resId) {
 
         toast = Toast.makeText(this, resId, Toast.LENGTH_LONG);
         toast.show();
     }
 
-    public void showToast(String text){
+    public void showToast(String text) {
 
         toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
         toast.show();
     }
 
-    public Toast getToast(){
+    public Toast getToast() {
         return toast;
     }
 
@@ -1334,31 +1340,38 @@ public class SampleAppActivity extends FragmentActivity implements
         // used; intentionally left blank
     }
 
+    //// TODO: 4/18/2017 onLampChanged
     @Override
     public void onLampChanged(final Lamp lamp) {
-        Log.d(SampleAppActivity.TAG, "onLampChanged() " + lamp.getName());
+        Log.d(SampleAppActivity.TAG, "LSFSampleApp() " + lamp.getId());
 
         Fragment lampsPageFragment = getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
 
         if (lampsPageFragment != null) {
-            LampsTableFragment tableFragment = (LampsTableFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+            LampsTableFragment tableFragment = (LampsTableFragment) lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
             if (tableFragment != null) {
                 // Call addLamp() rather than addItem() to update the color indicator
                 tableFragment.addLamp(lamp);
             }
 
-            LampInfoFragment infoFragment = (LampInfoFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+            LampInfoFragment infoFragment = (LampInfoFragment) lampsPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
             if (infoFragment != null) {
                 infoFragment.updateInfoFields(lamp);
             }
 
-            LampDetailsFragment detailsFragment = (LampDetailsFragment)lampsPageFragment.getChildFragmentManager().findFragmentByTag(LampsPageFragment.CHILD_TAG_DETAILS);
+            LampDetailsFragment detailsFragment = (LampDetailsFragment) lampsPageFragment.getChildFragmentManager().findFragmentByTag(LampsPageFragment.CHILD_TAG_DETAILS);
 
             if (detailsFragment != null) {
                 detailsFragment.updateDetailFields(lamp);
             }
+        }
+
+        Fragment systemDetail = getSupportFragmentManager().findFragmentByTag(SystemDetailFrament.TAG);
+        if(systemDetail != null){
+            SystemDetailFrament detailFrament = (SystemDetailFrament) systemDetail;
+            detailFrament.onLampChanged(lamp);
         }
 
         if (LightingDirector.get().isControllerServiceLeaderV1()) {
@@ -1419,7 +1432,7 @@ public class SampleAppActivity extends FragmentActivity implements
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG);
 
         if (pageFragment != null) {
-            GroupsTableFragment tableFragment = (GroupsTableFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+            GroupsTableFragment tableFragment = (GroupsTableFragment) pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
             if (tableFragment != null) {
                 tableFragment.addItem(group);
@@ -1429,7 +1442,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 }
             }
 
-            GroupInfoFragment infoFragment = (GroupInfoFragment)pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+            GroupInfoFragment infoFragment = (GroupInfoFragment) pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
             if (infoFragment != null) {
                 infoFragment.updateInfoFields(group);
@@ -1451,8 +1464,8 @@ public class SampleAppActivity extends FragmentActivity implements
 
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG);
         FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
-        GroupsTableFragment tableFragment = childManager != null ? (GroupsTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
-        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
+        GroupsTableFragment tableFragment = childManager != null ? (GroupsTableFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
+        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
 
         if (tableFragment != null) {
             tableFragment.removeElement(groupID);
@@ -1533,7 +1546,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         if (pageFragment != null) {
             FragmentManager childManager = pageFragment.getChildFragmentManager();
-            DimmableItemPresetsFragment presetFragment = (DimmableItemPresetsFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_PRESETS);
+            DimmableItemPresetsFragment presetFragment = (DimmableItemPresetsFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_PRESETS);
 
             updatePresetFragment(presetFragment);
         }
@@ -1550,7 +1563,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         if (pageFragment != null) {
             FragmentManager childManager = pageFragment.getChildFragmentManager();
-            SceneElementV2SelectEffectFragment effectsFragment = (SceneElementV2SelectEffectFragment)childManager.findFragmentByTag(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+            SceneElementV2SelectEffectFragment effectsFragment = (SceneElementV2SelectEffectFragment) childManager.findFragmentByTag(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
 
             if (effectsFragment != null) {
                 effectsFragment.onUpdateView();
@@ -1563,7 +1576,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         if (pageFragment != null) {
             FragmentManager childManager = pageFragment.getChildFragmentManager();
-            SceneElementV2SelectEffectFragment effectsFragment = (SceneElementV2SelectEffectFragment)childManager.findFragmentByTag(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
+            SceneElementV2SelectEffectFragment effectsFragment = (SceneElementV2SelectEffectFragment) childManager.findFragmentByTag(ScenesPageFragment.CHILD_TAG_SELECT_EFFECT);
 
             if (effectsFragment != null) {
                 effectsFragment.removeElement(effectID);
@@ -1575,7 +1588,7 @@ public class SampleAppActivity extends FragmentActivity implements
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(pageFragmentTag);
 
         if (pageFragment != null) {
-            updateinfoFragmentPresetFields((DimmableItemInfoFragment)pageFragment.getChildFragmentManager().findFragmentByTag(infoFragmentTag));
+            updateinfoFragmentPresetFields((DimmableItemInfoFragment) pageFragment.getChildFragmentManager().findFragmentByTag(infoFragmentTag));
         }
     }
 
@@ -1590,7 +1603,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         if (pageFragment != null) {
             FragmentManager childManager = pageFragment.getChildFragmentManager();
-            DimmableItemPresetsFragment presetFragment = (DimmableItemPresetsFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_PRESETS);
+            DimmableItemPresetsFragment presetFragment = (DimmableItemPresetsFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_PRESETS);
 
             removePreset(presetFragment, presetID);
         }
@@ -1606,7 +1619,7 @@ public class SampleAppActivity extends FragmentActivity implements
         Scene[] scenes = LightingDirector.get().getScenes();
 
         for (Scene scene : scenes) {
-            SceneElement[] sceneElements = ((SceneV2)scene).getSceneElements();
+            SceneElement[] sceneElements = ((SceneV2) scene).getSceneElements();
             boolean found = false;
 
             for (int sceneElementIndex = 0; !found && sceneElementIndex < sceneElements.length; sceneElementIndex++) {
@@ -1623,7 +1636,7 @@ public class SampleAppActivity extends FragmentActivity implements
         Scene[] scenes = LightingDirector.get().getScenes();
 
         for (Scene scene : scenes) {
-            SceneElement[] sceneElements = ((SceneV2)scene).getSceneElements();
+            SceneElement[] sceneElements = ((SceneV2) scene).getSceneElements();
             boolean found = false;
 
             for (int sceneElementIndex = 0; !found && sceneElementIndex < sceneElements.length; sceneElementIndex++) {
@@ -1654,8 +1667,8 @@ public class SampleAppActivity extends FragmentActivity implements
 
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
         FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
-        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
-        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
+        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
+        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
 
         if (tableFragment != null) {
             tableFragment.removeElement(basicScene.getId());
@@ -1683,10 +1696,10 @@ public class SampleAppActivity extends FragmentActivity implements
     }
 
     private void refreshScene(Scene basicScene) {
-        ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+        ScenesPageFragment scenesPageFragment = (ScenesPageFragment) getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
 
         if (scenesPageFragment != null) {
-            ScenesTableFragment basicSceneTableFragment = (ScenesTableFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+            ScenesTableFragment basicSceneTableFragment = (ScenesTableFragment) scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
             if (basicSceneTableFragment != null && basicScene != null) {
                 basicSceneTableFragment.addBasicScene(this, basicScene);
@@ -1697,7 +1710,7 @@ public class SampleAppActivity extends FragmentActivity implements
             }
 
             if (scenesPageFragment.isBasicMode()) {
-                SceneItemInfoFragment basicSceneInfoFragment = (SceneItemInfoFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+                SceneItemInfoFragment basicSceneInfoFragment = (SceneItemInfoFragment) scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
                 if (basicSceneInfoFragment != null) {
                     basicSceneInfoFragment.updateInfoFields();
@@ -1715,10 +1728,10 @@ public class SampleAppActivity extends FragmentActivity implements
     public void onMasterSceneChanged(MasterScene masterScene) {
         Log.d(SampleAppActivity.TAG, "onMasterSceneChanged() " + masterScene.getName());
 
-        ScenesPageFragment scenesPageFragment = (ScenesPageFragment)getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
+        ScenesPageFragment scenesPageFragment = (ScenesPageFragment) getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
 
         if (scenesPageFragment != null) {
-            ScenesTableFragment scenesTableFragment = (ScenesTableFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
+            ScenesTableFragment scenesTableFragment = (ScenesTableFragment) scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE);
 
             if (scenesTableFragment != null) {
                 scenesTableFragment.addMasterScene(this, masterScene);
@@ -1729,7 +1742,7 @@ public class SampleAppActivity extends FragmentActivity implements
             }
 
             if (scenesPageFragment.isMasterMode()) {
-                MasterSceneInfoFragment masterSceneInfoFragment = (MasterSceneInfoFragment)scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+                MasterSceneInfoFragment masterSceneInfoFragment = (MasterSceneInfoFragment) scenesPageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
 
                 if (masterSceneInfoFragment != null) {
                     masterSceneInfoFragment.updateInfoFields();
@@ -1744,8 +1757,8 @@ public class SampleAppActivity extends FragmentActivity implements
 
         Fragment pageFragment = getSupportFragmentManager().findFragmentByTag(ScenesPageFragment.TAG);
         FragmentManager childManager = pageFragment != null ? pageFragment.getChildFragmentManager() : null;
-        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
-        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment)childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
+        ScenesTableFragment tableFragment = childManager != null ? (ScenesTableFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_TABLE) : null;
+        PageFrameChildFragment infoFragment = childManager != null ? (PageFrameChildFragment) childManager.findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO) : null;
 
         if (tableFragment != null) {
             tableFragment.removeElement(masterScene.getId());
@@ -1805,9 +1818,9 @@ public class SampleAppActivity extends FragmentActivity implements
             @Override
             public void run() {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                PageFrameParentFragment lampsPageFragment = (PageFrameParentFragment)fragmentManager.findFragmentByTag(LampsPageFragment.TAG);
-                PageFrameParentFragment groupsPageFragment = (PageFrameParentFragment)fragmentManager.findFragmentByTag(GroupsPageFragment.TAG);
-                PageFrameParentFragment scenesPageFragment = (PageFrameParentFragment)fragmentManager.findFragmentByTag(ScenesPageFragment.TAG);
+                PageFrameParentFragment lampsPageFragment = (PageFrameParentFragment) fragmentManager.findFragmentByTag(LampsPageFragment.TAG);
+                PageFrameParentFragment groupsPageFragment = (PageFrameParentFragment) fragmentManager.findFragmentByTag(GroupsPageFragment.TAG);
+                PageFrameParentFragment scenesPageFragment = (PageFrameParentFragment) fragmentManager.findFragmentByTag(ScenesPageFragment.TAG);
                 Fragment settingsFragment = null;
 
                 if (lampsPageFragment != null) {
@@ -1859,7 +1872,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 }
 
                 if (settingsFragment != null) {
-                    ((SettingsFragment)settingsFragment).onUpdateView();
+                    ((SettingsFragment) settingsFragment).onUpdateView();
                 }
             }
         });
