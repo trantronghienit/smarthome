@@ -1340,11 +1340,11 @@ public class SampleAppActivity extends FragmentActivity implements
         // used; intentionally left blank
     }
 
-    //// TODO: 4/18/2017 onLampChanged
+    // TODO: 4/18/2017 onLampChanged
     @Override
     public void onLampChanged(final Lamp lamp) {
         Log.d(SampleAppActivity.TAG, "LSFSampleApp() " + lamp.getId());
-
+        Log.d(SampleAppActivity.TAG, "onLampChanged() Default value " + lamp.getLampDataModel().getState().getBrightness());
         Fragment lampsPageFragment = getSupportFragmentManager().findFragmentByTag(LampsPageFragment.TAG);
 
         if (lampsPageFragment != null) {
