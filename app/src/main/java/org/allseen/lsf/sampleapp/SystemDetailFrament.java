@@ -1,30 +1,21 @@
 package org.allseen.lsf.sampleapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.HandlerThread;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-
-
 import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.LampCapabilities;
-import org.allseen.lsf.sdk.LampDetails;
-import org.allseen.lsf.sdk.LampListener;
 import org.allseen.lsf.sdk.LightingDirector;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.LightingSystemQueue;
 import org.allseen.lsf.sdk.MutableColorItem;
-import org.allseen.lsf.sdk.Power;
 import org.jetbrains.annotations.Nullable;
+
 
 /**
  * Created by admin on 3/21/2017.
@@ -32,9 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 
 @SuppressLint("ValidFragment")
-public class SystemDetailFrament extends PageFrameParentFragment{
+public class SystemDetailFrament extends PageFrameParentFragment {
 
-    private static final long CALLBACK = 500;
     private TextView txtHumidity  , txtTemperature , txtPh;
     private Lamp lamp;
     private String TAG_LOG = "SystemDetailFrament";
@@ -53,15 +43,18 @@ public class SystemDetailFrament extends PageFrameParentFragment{
     public static final int TAG_LIGHT_INTENSITY_ONE = 3;
     public static final int TAG_LIGHT_INTENSITY_TWO = 4;
     public static final int TAG_LIGHT_INTENSITY_THREE = 5;
+    private final int DEFAULT_16BIT = 65535;
 
     private final String DEFAULT_VALUE = "000";
 
     public static String TAG;
     private String deviceType = null;
+    private Context mContext;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity();
     }
 
     private void inIt(View view){
@@ -77,6 +70,11 @@ public class SystemDetailFrament extends PageFrameParentFragment{
 
     @Override
     public PageFrameChildFragment createInfoChildFragment() {
+        return null;
+    }
+
+    @Override
+    public PageFrameChildFragment createInfoChildFragment(TypeInfo typeInfo) {
         return null;
     }
 
@@ -107,7 +105,6 @@ public class SystemDetailFrament extends PageFrameParentFragment{
      *   ColorItem item.getUniformity().power,
      */
     public void onLampChanged(final Lamp lamp) {
-        //todo Working changes
         if (lamp != null){
 
             this.setDeviceType(lamp.getDetails().getLampType().name());
@@ -141,28 +138,27 @@ public class SystemDetailFrament extends PageFrameParentFragment{
                             + "\tStatus: " + lamp.getUniformity().power);
                     break;
                 case TAG_LIGHT_INTENSITY_ONE:
-                    Log.i("lightIntensityOne" ,"" + lamp.getName() + "\tBrightness: " + colorItem.getColor().getBrightness()
-                            + "\tSaturation: "+ colorItem.getColor().getSaturation() + "\tHue: "+  colorItem.getColor().getHue()
-                            + "\tColorTemperature: "+ colorItem.getColor().getColorTemperature());
-//                    String valueOne = String.valueOf( colorItem.getColor().getBrightness() ) ;
-//                    ((TextView)getView().findViewById(R.id.txt_group_light_one)).setText(valueOne);
-                    ((TextView)getView().findViewById(R.id.txt_group_light_one)).setText(""+383);
+                    String brightnessOne = converntForViewDevicesBri(lamp.getLampDataModel().getState().getBrightness());
+                    ((TextView) getView().findViewById(R.id.txt_group_light_one)).setText(brightnessOne);
                     break;
                 case TAG_LIGHT_INTENSITY_TWO:
-//                    String valueTwo = String.valueOf( colorItem.getColor().getBrightness() ) ;
-//                    ((TextView)getView().findViewById(R.id.txt_group_light_two)).setText(valueTwo);
-                    ((TextView)getView().findViewById(R.id.txt_group_light_two)).setText(""+395);
+                    String brightnessTwo = converntForViewDevicesBri(lamp.getLampDataModel().getState().getBrightness());
+                    ((TextView) getView().findViewById(R.id.txt_group_light_two)).setText(brightnessTwo);
                     break;
                 case TAG_LIGHT_INTENSITY_THREE:
-//                    String valueThree = String.valueOf( colorItem.getColor().getBrightness() ) ;
-//                    ((TextView)getView().findViewById(R.id.txt_group_light_three)).setText(valueThree);
-                    ((TextView)getView().findViewById(R.id.txt_group_light_three)).setText(""+407);
+                    String brightnessThree = converntForViewDevicesBri(lamp.getLampDataModel().getState().getBrightness());
+                    ((TextView) getView().findViewById(R.id.txt_group_light_three)).setText(brightnessThree);
                     break;
                 default:
                     Log.i("SystemDetailFrament", "Device not type");
                     break;
             }
         }
+    }
+
+    private String converntForViewDevicesBri(long value) {
+        long result = value / DEFAULT_16BIT;
+        return String.valueOf(result);
     }
 
     public int CheckDeviceType(String deviceType){
@@ -192,20 +188,18 @@ public class SystemDetailFrament extends PageFrameParentFragment{
                 break;
             case TAG_FAN:
                 Log.i("LampFAN" , "" + lamp.getName());
-//                swFan.setEnabled(false);
                 break;
             case TAG_PUMP:
                 Log.i("LampPUMP" , "" + lamp.getName());
-//                swPuml.setEnabled(false);
                 break;
             case TAG_LIGHT_INTENSITY_ONE:
-                showToastMes(getContext().getString(R.string.light_intensity_message ,TAG_LIGHT_INTENSITY_ONE ) );
+                showToastMes(mContext.getString(R.string.light_intensity_message, TAG_LIGHT_INTENSITY_ONE));
                 break;
             case TAG_LIGHT_INTENSITY_TWO:
-                showToastMes(getContext().getString(R.string.light_intensity_message ,TAG_LIGHT_INTENSITY_TWO ) );
+                showToastMes(mContext.getString(R.string.light_intensity_message, TAG_LIGHT_INTENSITY_TWO));
                 break;
             case TAG_LIGHT_INTENSITY_THREE:
-                showToastMes(getContext().getString(R.string.light_intensity_message ,TAG_LIGHT_INTENSITY_THREE ) );
+                showToastMes(mContext.getString(R.string.light_intensity_message, TAG_LIGHT_INTENSITY_THREE));
                 break;
             default:
                 Log.i("SystemDetailFrament", "Remove Device not type");

@@ -48,7 +48,6 @@ public class PageFrameChildFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
     }
 
@@ -134,4 +133,5 @@ public class PageFrameChildFragment extends Fragment {
     public void onActionDone() {
         // Nothing to do by default -- subclasses may override
     }
+
 }

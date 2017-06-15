@@ -34,10 +34,16 @@ public abstract class PageFrameParentFragment extends Fragment {
 
     public static String TAG;
 
+    public enum TypeInfo {
+        TEMPERATURE, FAN, PUMP,
+        LIGHT_INTENSITY_ONE, LIGHT_INTENSITY_TWO, LIGHT_INTENSITY_THREE
+    }
     protected PageFrameChildFragment child = null;
 
     public abstract PageFrameChildFragment createTableChildFragment();
     public abstract PageFrameChildFragment createInfoChildFragment();
+
+    public abstract PageFrameChildFragment createInfoChildFragment(TypeInfo typeInfo);
     public abstract PageFrameChildFragment createPresetsChildFragment();
 
     public PageFrameChildFragment createSettingsChildFragment() {
@@ -87,12 +93,12 @@ public abstract class PageFrameParentFragment extends Fragment {
         showChildFragment(CHILD_TAG_TABLE, null);
     }
 
-    public void showInfoChildFragment(String key) {
-        showChildFragment(CHILD_TAG_INFO, key);
+    public void showInfoChildFragment(String key, TypeInfo typeInfo) {
+        showChildFragment(CHILD_TAG_INFO, key, typeInfo);
     }
 
     public void showPresetsChildFragment(String key1, String key2) {
-        showChildFragment(CHILD_TAG_PRESETS, key1, key2);
+        showChildFragment(CHILD_TAG_PRESETS, key1, key2, null);
     }
 
     public void showSettingsChildFragment(String key) {
@@ -103,17 +109,21 @@ public abstract class PageFrameParentFragment extends Fragment {
         showChildFragment(CHILD_TAG_TEXT, key);
     }
 
+    protected void showChildFragment(String tag, String key, TypeInfo typeInfo) {
+        showChildFragment(tag, key, null, typeInfo);
+    }
+
     protected void showChildFragment(String tag, String key) {
         showChildFragment(tag, key, null);
     }
 
-    protected void showChildFragment(String tag, String key1, String key2) {
+    protected void showChildFragment(String tag, String key1, String key2, TypeInfo typeInfo) {
         FragmentManager manager = getChildFragmentManager();
 
         child = (PageFrameChildFragment)manager.findFragmentByTag(tag);
 
         if (child == null) {
-            child = createChildFragment(tag);
+            child = createChildFragment(tag, typeInfo);
         }
 
         child.setParentFragment(this);
@@ -145,10 +155,29 @@ public abstract class PageFrameParentFragment extends Fragment {
             Log.e(SampleAppActivity.TAG, "Invalid child fragment tag: " + tag);
             child = null;
         }
-
         return child;
     }
 
+    protected PageFrameChildFragment createChildFragment(String tag, TypeInfo typeInfo) {
+        PageFrameChildFragment child = null;
+
+        if (tag == CHILD_TAG_TABLE) {
+            child = createTableChildFragment();
+        } else if (tag == CHILD_TAG_INFO) {
+            if (typeInfo != null)
+                child = createInfoChildFragment(typeInfo);
+        } else if (tag == CHILD_TAG_PRESETS) {
+            child = createPresetsChildFragment();
+        } else if (tag == CHILD_TAG_SETTINGS) {
+            child = createSettingsChildFragment();
+        } else if (tag == CHILD_TAG_TEXT) {
+            child = createTextChildFragment();
+        } else {
+            Log.e(SampleAppActivity.TAG, "Invalid child fragment tag: " + tag);
+            child = null;
+        }
+        return child;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_page_frame, container, false);

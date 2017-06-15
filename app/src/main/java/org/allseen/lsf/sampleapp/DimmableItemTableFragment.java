@@ -15,10 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.ColorItem;
-import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.LampCapabilities;
-
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -27,17 +23,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.aigestudio.wheelpicker.WheelPicker;
-import com.shawnlin.numberpicker.NumberPicker;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import org.allseen.lsf.sdk.ColorItem;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LampCapabilities;
 
 
 /**
@@ -52,6 +43,7 @@ public abstract class DimmableItemTableFragment
 
     protected abstract Fragment getInfoFragment();
 
+    private PageFrameParentFragment.TypeInfo typeInfo;
     public void addItems(ColorItem[] items) {
         for (ColorItem item : items) {
             addItem(item);
@@ -99,7 +91,7 @@ public abstract class DimmableItemTableFragment
 
 
     //todo : set for view fragment one
-    private List<Integer> listData;
+//    private List<Integer> listData;
     public <T> TableRow insertDimmableItemRow(Context context, LayoutInflater inflater,
                                               String itemID, Comparable<T> tag, boolean powerOn, boolean uniformPower,
                                               String name, int viewBrightness, boolean uniformBrightness, int infoBG,
@@ -120,12 +112,6 @@ public abstract class DimmableItemTableFragment
 
         int drawable = R.drawable.light_status_icon;
         boolean flagSetBackground;
-//        int tagDevice = new SystemDetailFrament().CheckDeviceType(lampType);
-//        Toast.makeText(context, ""+tagDevice , Toast.LENGTH_SHORT).show();
-        listData = new ArrayList<>();
-        for (int i = 0; i <= 100;i++){
-            listData.add(i);
-        }
         if (tableRow == null) {
             tableRow = new TableRow(context);
 
@@ -143,47 +129,44 @@ public abstract class DimmableItemTableFragment
 
             TextView txtItemName = (TextView) tableRow.findViewById(R.id.dimmableItemRowText);
             txtItemName.setText(name);
-
-            WheelPicker numberPicker = (WheelPicker) tableRow.findViewById(R.id.dimmableItemRowSlider);
-            numberPicker.setData(listData);
             if (isDevivesOnOff) {
 
                 if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_PUMP)) {
                     drawable = R.drawable.ic_pump;
+                    typeInfo = PageFrameParentFragment.TypeInfo.PUMP;
                 } else if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_FAN)) {
                     drawable = R.drawable.ic_fan;
+                    typeInfo = PageFrameParentFragment.TypeInfo.FAN;
                 }
                 powerButton.setVisibility(View.VISIBLE);
-                infoButton.setEnabled(false);
-                numberPicker.setVisibility(View.GONE);
+//                infoButton.setEnabled(false);
                 flagSetBackground = false;
                 // device only show value then hide powerButton and infoButton disable click
             } else if (isDevicesOnlyShow) {
                 if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
                     drawable = R.drawable.ic_humidity_temper;
+                    typeInfo = PageFrameParentFragment.TypeInfo.TEMPERATURE;
                 } else {
                     drawable = R.drawable.ic_lighting;
                 }
-                numberPicker.setVisibility(View.GONE);
                 powerButton.setVisibility(View.INVISIBLE);
-                infoButton.setEnabled(false);
+//                infoButton.setEnabled(false);
                 flagSetBackground = false;
             } else {
                 // else is lamp then hide powerButton , but show numberPicker and infoButton
                 powerButton.setVisibility(View.INVISIBLE);
-                numberPicker.setVisibility(View.VISIBLE);
-                infoButton.setEnabled(true);
+//                infoButton.setEnabled(true);
                 flagSetBackground = true;
             }
 
-            numberPicker.setSelectedItemPosition(viewBrightness);
-            numberPicker.setTag(itemID);
-            numberPicker.setSaveEnabled(false);
+//            numberPicker.setSelectedItemPosition(viewBrightness);
+//            numberPicker.setTag(itemID);
+//            numberPicker.setSaveEnabled(false);
 
-            PickerListener pickerListener = new PickerListener(numberPicker);
-            numberPicker.setOnItemSelectedListener(pickerListener);
-            numberPicker.setOnWheelChangeListener(pickerListener);
-            numberPicker.setEnabled(isEnabled);
+//            PickerListener pickerListener = new PickerListener(numberPicker);
+//            numberPicker.setOnItemSelectedListener(pickerListener);
+//            numberPicker.setOnWheelChangeListener(pickerListener);
+//            numberPicker.setEnabled(isEnabled);
 
             if (infoBG != 0 && flagSetBackground == true) {
                 infoButton.setBackgroundColor(infoBG);
@@ -210,43 +193,38 @@ public abstract class DimmableItemTableFragment
 
             ((TextView) tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
-            WheelPicker numberPicker = (WheelPicker) tableRow.findViewById(R.id.dimmableItemRowSlider);
-            numberPicker.setData(listData);
-
             if (isDevivesOnOff) {
                 if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_PUMP)) {
                     drawable = R.drawable.ic_pump;
+                    typeInfo = PageFrameParentFragment.TypeInfo.PUMP;
                 } else if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_FAN)) {
                     drawable = R.drawable.ic_fan;
+                    typeInfo = PageFrameParentFragment.TypeInfo.FAN;
                 } else if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
                     drawable = R.drawable.ic_humidity_temper;
+                    typeInfo = PageFrameParentFragment.TypeInfo.TEMPERATURE;
                 }
                 powerButton.setVisibility(View.VISIBLE);
-                numberPicker.setVisibility(View.GONE);
-                infoButton.setEnabled(false);
+//                infoButton.setEnabled(false);
                 flagSetBackground = false;
                 // device only show value then hide powerButton and infoButton disable click
             } else if (isDevicesOnlyShow) {
                 if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
                     drawable = R.drawable.ic_humidity_temper;
+                    typeInfo = PageFrameParentFragment.TypeInfo.TEMPERATURE;
                 } else {
                     drawable = R.drawable.ic_lighting;
                 }
-                numberPicker.setVisibility(View.GONE);
                 powerButton.setVisibility(View.INVISIBLE);
-                infoButton.setEnabled(false);
+//                infoButton.setEnabled(false);
                 flagSetBackground = false;
             } else {
-                numberPicker.setVisibility(View.VISIBLE);
                 powerButton.setVisibility(View.INVISIBLE);
                 flagSetBackground = true;
                 infoButton.setEnabled(true);
             }
 
-            numberPicker.setSelectedItemPosition(viewBrightness);
-            numberPicker.setEnabled(isEnabled);
-
-            // when click off seekbar set Value 0
+//             when click off seekbar set Value 0
 //            if (!powerOn){
 //                numberPicker.setValue(0);
 //                numberPicker.setEnabled(false);
@@ -276,71 +254,9 @@ public abstract class DimmableItemTableFragment
             if (buttonID == R.id.dimmableItemButtonPower) {
                 ((SampleAppActivity) getActivity()).togglePower(type, button.getTag().toString());
             } else if (buttonID == R.id.dimmableItemButtonMore) {
-                ((SampleAppActivity) getActivity()).onItemButtonMore(parent, type, button, button.getTag().toString(), null, true);
+                ((SampleAppActivity) getActivity()).onItemButtonMoreForDevice(parent, type, button.getTag().toString(), typeInfo);
 
-            } else if (!((NumberPicker) button.findViewById(R.id.dimmableItemRowSlider)).isEnabled()) {
-                ((SampleAppActivity) getActivity()).showToast(R.string.no_support_dimmable);
             }
-        }
-    }
-
-    private void updateValue(int position, WheelPicker numberPicker) {
-        if (parent != null) {
-            int value = (int)numberPicker.getData().get(position);
-            ((SampleAppActivity) getActivity()).setBrightness(type, numberPicker.getTag().toString(), value);
-        }
-    }
-
-//    protected class PickerListener implements NumberPicker.OnScrollListener, NumberPicker.OnValueChangeListener {
-//        private int scrollState = 0;
-//
-//        @Override
-//        public void onScrollStateChange(NumberPicker view, int scrollState) {
-//            this.scrollState = scrollState;
-//            if (scrollState == SCROLL_STATE_IDLE) {
-//                updateValue(view);
-//
-//            }
-//        }
-//
-//        @Override
-//        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//            if (scrollState == 0) {
-//                updateValue(picker);
-//            }
-//        }
-//    }
-
-    protected class PickerListener implements WheelPicker.OnWheelChangeListener, WheelPicker.OnItemSelectedListener {
-
-        private WheelPicker picker;
-        private boolean flag = true;
-        public PickerListener(WheelPicker picker){
-            this.picker = picker;
-        }
-
-        @Override
-        public void onWheelScrolled(int offset) {
-            if(offset ==0 && flag == true){
-                updateValue(picker.getCurrentItemPosition() , picker);
-            }
-        }
-
-        @Override
-        public void onWheelSelected(int position) {
-            updateValue(position , picker);
-        }
-
-        @Override
-        public void onWheelScrollStateChanged(int state) {
-//            if(state == 0)
-//                Toast.makeText(Main2Activity.this, "onWheelScrollStateChanged "+state, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onItemSelected(WheelPicker picker, Object data, int position) {
-            this.flag = false;
-            updateValue(position , picker);
         }
     }
 }

@@ -15,30 +15,28 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.LampCapabilities;
-
-import android.content.Loader;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.aigestudio.wheelpicker.WheelPicker;
+import com.it.hientran.wheelpicker.WheelPicker;
+
+import org.allseen.lsf.sdk.LampCapabilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 // TODO: 5/20/2017  control picker(lamp) in lamp info
-public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnClickListener , WheelPicker.OnItemSelectedListener{
+public class LampStateViewAdapter implements OnSeekBarChangeListener, View.OnClickListener {
 
     public final View stateView;
     public final DimmableItemInfoFragment parentFragment;
 
     public final Button presetsButton;
-    public final WheelPicker brightnessSeekBar;
+    public final WheelPicker brightnessPicker;
     public final SeekBar hueSeekBar;
     public final SeekBar saturationSeekBar;
     public final SeekBar tempSeekBar;
@@ -55,17 +53,19 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnCli
 
         presetsButton = (Button) stateView.findViewById(R.id.stateButton);
 
-        brightnessSeekBar = (WheelPicker) stateView.findViewById(R.id.stateSliderBrightness);
+        brightnessPicker = (WheelPicker) stateView.findViewById(R.id.stateSliderBrightness);
         listData = new ArrayList<>();
         for (int i = 0; i <= 100;i++){
             listData.add(i);
         }
         if( !(listData.size() < 100 ) )
-            brightnessSeekBar.setData(listData);
+            brightnessPicker.setData(listData);
 
-        brightnessSeekBar.setTag(tag);
-        brightnessSeekBar.setSaveEnabled(false);
-        brightnessSeekBar.setOnItemSelectedListener(this);
+        brightnessPicker.setTag(tag);
+        brightnessPicker.setSaveEnabled(false);
+        PickerListener pickerListener = new PickerListener(brightnessPicker);
+        brightnessPicker.setOnItemSelectedListener(pickerListener);
+        brightnessPicker.setOnWheelChangeListener(pickerListener);
         stateView.findViewById(R.id.stateControlBrightness).setOnClickListener(this);
 
         hueSeekBar = (SeekBar) stateView.findViewById(R.id.stateSliderHue);
@@ -99,10 +99,10 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnCli
 
         // dimmable
         if (capability.dimmable >= LampCapabilities.SOME) {
-            brightnessSeekBar.setEnabled(true);
+            brightnessPicker.setEnabled(true);
             presetsButton.setEnabled(true);
         } else {
-            brightnessSeekBar.setEnabled(false);
+            brightnessPicker.setEnabled(false);
             presetsButton.setEnabled(false);
             parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, parentFragment.getResources().getString(R.string.na), 0);
         }
@@ -162,10 +162,8 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnCli
     public void setBrightness(int viewBrightness, boolean uniformBrightness) {
         Log.i("LampStateViewAdapter" , " " + viewBrightness);
         if (capability.dimmable >= LampCapabilities.SOME) {
-            brightnessSeekBar.setSelectedItemPosition(viewBrightness);
-            Log.i("LampState" , " " + brightnessSeekBar.getCurrentItemPosition());
-//            brightnessSeekBar.setThumb(parentFragment.getResources().getDrawable(uniformBrightness ? R.drawable.slider_thumb_normal : R.drawable.slider_thumb_midstate));
-
+            brightnessPicker.setSelectedItemPosition(viewBrightness);
+            Log.i("LampState", " " + brightnessPicker.getCurrentItemPosition());
             parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, viewBrightness, R.string.units_percent);
         }
     }
@@ -199,7 +197,6 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnCli
         }
     }
 
-    // todo saturation
     private void saturationCheck() {
         if (saturationSeekBar.getProgress() == 0) {
             hueSeekBar.setEnabled(false);
@@ -238,7 +235,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnCli
             if (seekBar.getId() == R.id.stateSliderSaturation) {
                 saturationCheck();
             }
-            // // FIXME: 5/20/2017 edit change for stateSliderBrightness
+            // FIXME: 5/20/2017 edit change for stateSliderBrightness
 //            setTextViewValues(seekBar);
         }
     }
@@ -289,19 +286,52 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener ,View.OnCli
         }
     }
 
-    @Override
-    public void onItemSelected(WheelPicker picker, Object data, int position) {
-        switch (picker.getId()) {
-            case R.id.stateSliderBrightness:
-                int progress = ((Integer) data).intValue();
-                setTextValueBrightness(progress);
-                break;
-        }
-    }
 
     private void setTextValueBrightness(int progress){
         parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, progress, R.string.units_percent);
         setBrightness(progress , true);
+    }
+
+    private void updateValue(int position, WheelPicker numberPicker) {
+        if (parentFragment != null) {
+            int value = (int) numberPicker.getData().get(position);
+            parentFragment.setField(numberPicker, value);
+            setTextValueBrightness(value);
+        }
+    }
+
+
+    protected class PickerListener implements WheelPicker.OnWheelChangeListener
+            , WheelPicker.OnItemSelectedListener {
+
+        private WheelPicker picker;
+        private boolean flag = true;
+
+        public PickerListener(WheelPicker picker) {
+            this.picker = picker;
+        }
+
+        @Override
+        public void onWheelScrolled(int offset) {
+            if (offset == 0 && flag == true) {
+                updateValue(picker.getCurrentItemPosition(), picker);
+            }
+        }
+
+        @Override
+        public void onWheelSelected(int position) {
+            updateValue(position, picker);
+        }
+
+        @Override
+        public void onWheelScrollStateChanged(int state) {
+        }
+
+        @Override
+        public void onItemSelected(WheelPicker picker, Object data, int position) {
+            this.flag = false;
+            updateValue(position, picker);
+        }
     }
 }
 

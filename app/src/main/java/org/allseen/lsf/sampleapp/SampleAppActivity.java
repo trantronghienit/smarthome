@@ -16,40 +16,6 @@
 
 package org.allseen.lsf.sampleapp;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Queue;
-
-import org.allseen.lsf.sdk.AllLightingItemListener;
-import org.allseen.lsf.sdk.Color;
-import org.allseen.lsf.sdk.Controller;
-import org.allseen.lsf.sdk.DeletableItem;
-import org.allseen.lsf.sdk.ErrorCode;
-import org.allseen.lsf.sdk.Group;
-import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.LampAbout;
-import org.allseen.lsf.sdk.LightingController;
-import org.allseen.lsf.sdk.LightingDirector;
-import org.allseen.lsf.sdk.LightingItem;
-import org.allseen.lsf.sdk.LightingItemErrorEvent;
-import org.allseen.lsf.sdk.LightingSystemQueue;
-import org.allseen.lsf.sdk.MasterScene;
-import org.allseen.lsf.sdk.MutableColorItem;
-import org.allseen.lsf.sdk.Preset;
-import org.allseen.lsf.sdk.PulseEffect;
-import org.allseen.lsf.sdk.ResponseCode;
-import org.allseen.lsf.sdk.Scene;
-import org.allseen.lsf.sdk.SceneElement;
-import org.allseen.lsf.sdk.SceneItem;
-import org.allseen.lsf.sdk.SceneV1;
-import org.allseen.lsf.sdk.SceneV2;
-import org.allseen.lsf.sdk.TrackingID;
-import org.allseen.lsf.sdk.TransitionEffect;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -83,6 +49,40 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.allseen.lsf.sdk.AllLightingItemListener;
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.Controller;
+import org.allseen.lsf.sdk.DeletableItem;
+import org.allseen.lsf.sdk.ErrorCode;
+import org.allseen.lsf.sdk.Group;
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LampAbout;
+import org.allseen.lsf.sdk.LightingController;
+import org.allseen.lsf.sdk.LightingDirector;
+import org.allseen.lsf.sdk.LightingItem;
+import org.allseen.lsf.sdk.LightingItemErrorEvent;
+import org.allseen.lsf.sdk.LightingSystemQueue;
+import org.allseen.lsf.sdk.MasterScene;
+import org.allseen.lsf.sdk.MutableColorItem;
+import org.allseen.lsf.sdk.Preset;
+import org.allseen.lsf.sdk.PulseEffect;
+import org.allseen.lsf.sdk.ResponseCode;
+import org.allseen.lsf.sdk.Scene;
+import org.allseen.lsf.sdk.SceneElement;
+import org.allseen.lsf.sdk.SceneItem;
+import org.allseen.lsf.sdk.SceneV1;
+import org.allseen.lsf.sdk.SceneV2;
+import org.allseen.lsf.sdk.TrackingID;
+import org.allseen.lsf.sdk.TransitionEffect;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Queue;
 
 public class SampleAppActivity extends FragmentActivity implements
         ActionBar.TabListener,
@@ -368,11 +368,13 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
-        viewPager.setCurrentItem(tab.getPosition());
-
-        updateActionBar(actionBarHasAdd(), false, false, true);
+        int indexSeleted = tab.getPosition();
+        viewPager.setCurrentItem(indexSeleted);
+        boolean showSettings = true;
+        if (indexSeleted == 1) {
+            showSettings = false;
+        }
+        updateActionBar(actionBarHasAdd(), false, false, showSettings);
     }
 
     @Override
@@ -425,9 +427,10 @@ public class SampleAppActivity extends FragmentActivity implements
 
     public void onItemButtonMore(PageFrameParentFragment parent, Type type, View button, String itemID, String subItemID, boolean enabled) {
         switch (type) {
-            case LAMP:
-                showInfoFragment(parent, itemID);
-                return;
+            // TODO: 6/15/2017 edit LAMP
+//            case LAMP:
+//                showInfoFragment(parent, itemID);
+//                return;
             case GROUP:
                 showGroupMorePopup(button, itemID);
                 return;
@@ -440,10 +443,19 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
-    private void showInfoFragment(PageFrameParentFragment parent, String itemID) {
-        pageFrameParent = parent;
+    public void onItemButtonMoreForDevice(PageFrameParentFragment parent, Type type, String itemID, PageFrameParentFragment.TypeInfo typeInfo) {
+        switch (type) {
+            case LAMP:
+                showInfoFragment(parent, itemID, typeInfo);
+                return;
+        }
+    }
 
-        parent.showInfoChildFragment(itemID);
+
+    // showInfoFragment
+    private void showInfoFragment(PageFrameParentFragment parent, String itemID, PageFrameParentFragment.TypeInfo typeInfo) {
+        pageFrameParent = parent;
+        parent.showInfoChildFragment(itemID, typeInfo);
     }
 
     public boolean applySceneElement(String sceneElementID) {
@@ -819,8 +831,6 @@ public class SampleAppActivity extends FragmentActivity implements
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
-
-            ;
         });
         alertDialogBuilder.show();
     }
@@ -842,7 +852,7 @@ public class SampleAppActivity extends FragmentActivity implements
             }
         }
 
-        showInfoFragment(scenesPageFragment, popupItemID);
+        showInfoFragment(scenesPageFragment, popupItemID, null);
     }
 
     public void showLampDetailsFragment(LampsPageFragment parent, String key) {
@@ -1048,7 +1058,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         switch (item.getItemId()) {
             case R.id.group_info:
-                showInfoFragment((GroupsPageFragment) (getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)), popupItemID);
+                showInfoFragment((GroupsPageFragment) (getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)), popupItemID, null);
                 break;
             case R.id.group_delete:
                 showConfirmDeleteGroupDialog(popupItemID);
@@ -1121,7 +1131,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 // scene V1 creation workflow. Note that if the user backs out
                 // of the scene V1 creation process, we have to skip over the
                 // dummy info fragment (see ScenesPageFragment.onBackPressed())
-                parent.showInfoChildFragment(null);
+                parent.showInfoChildFragment(null, null);
             }
 
             parent.showEnterNameChildFragment();
@@ -1398,6 +1408,12 @@ public class SampleAppActivity extends FragmentActivity implements
                 if (LightingDirector.get().getLampCount() == 0) {
                     tableFragment.updateLoading();
                 }
+            }
+
+            // todo: xử lý khi thiết bị removed
+            LampInfoFragment infoFragment = (LampInfoFragment) pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
+            if (infoFragment != null) {
+                infoFragment.removeElement(lampID);
             }
         }
 

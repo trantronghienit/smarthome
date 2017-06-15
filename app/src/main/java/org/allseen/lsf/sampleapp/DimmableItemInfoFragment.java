@@ -15,15 +15,8 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.Color;
-import org.allseen.lsf.sdk.ColorItem;
-import org.allseen.lsf.sdk.LampCapabilities;
-import org.allseen.lsf.sdk.LampStateUniformity;
-import org.allseen.lsf.sdk.MyLampState;
-
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,16 +25,28 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.it.hientran.wheelpicker.WheelPicker;
+
+import org.allseen.lsf.sdk.Color;
+import org.allseen.lsf.sdk.ColorItem;
+import org.allseen.lsf.sdk.LampCapabilities;
+import org.allseen.lsf.sdk.LampStateUniformity;
+import org.allseen.lsf.sdk.MyLampState;
+
+
 public abstract class DimmableItemInfoFragment extends PageFrameChildFragment implements View.OnClickListener {
 
     public static final String STATE_ITEM_TAG = "STATE";
     public static int defaultIndicatorColor = 00000000;
 
     protected SampleAppActivity.Type itemType = SampleAppActivity.Type.LAMP;
+    protected PageFrameParentFragment.TypeInfo itemTypeInfo;
     protected LampStateViewAdapter stateAdapter;
 
     protected View statusView;
     protected View stateView;
+    protected TextView txtState;
+    protected WheelPicker wheelPicker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +55,9 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         view = inflater.inflate(getLayoutID(), container, false);
         statusView = view.findViewById(R.id.infoStatusRow);
         stateView = view.findViewById(R.id.infoStateRow);
-
+        txtState = (TextView) stateView.findViewById(R.id.stateTextBrightness);
+        wheelPicker = (WheelPicker) stateView.findViewById(R.id.stateSliderBrightness);
+        wheelPicker.setScrollingEnabled(true);
         // power button
         ImageButton powerButton = (ImageButton)statusView.findViewById(R.id.statusButtonPower);
         powerButton.setTag(itemID);
@@ -70,8 +77,6 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         presetsButton.setTag(STATE_ITEM_TAG);
         presetsButton.setClickable(true);
         presetsButton.setOnClickListener(this);
-
-        // TODO: 3/20/2017  set adapter propertion
         // state adapter
         stateAdapter = new LampStateViewAdapter(stateView, getLampStateViewAdapterTag(), getColorTempMin(), getColorTempSpan(), this);
 
@@ -104,6 +109,21 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         } else if (seekBarID == R.id.stateSliderColorTemp) {
             ((SampleAppActivity)getActivity()).setColorTemp(itemType, seekBar.getTag().toString(), seekBar.getProgress() + getColorTempMin());
         }
+    }
+
+    public void setField(WheelPicker picker, int value) {
+        int pickerID = picker.getId();
+        SampleAppActivity sampleAppActivity = ((SampleAppActivity) getActivity());
+        try {
+            if (pickerID == R.id.stateSliderBrightness) {
+                sampleAppActivity.setBrightness(itemType, picker.getTag().toString(), value);
+            }
+        } catch (NullPointerException e) {
+            MessageExceptionUtil.NullPointerCause(e, "DimmableItemInfoFragment", "setField");
+        } catch (Exception e) {
+            MessageExceptionUtil.ExceptionCause(e, "DimmableItemInfoFragment", "setField");
+        }
+
     }
 
     public void updateInfoFields(ColorItem colorItem) {
@@ -150,6 +170,12 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         int color = lampState != null ? ViewColor.calculate(lampState, capability, viewColorTempDefault) : defaultIndicatorColor;
 
         parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
+    }
+
+    // TODO: 6/14/2017  remove Element
+    public void removeElement(String lampID) {
+        txtState.setText("Thiết bị bị mất kết nối");
+        wheelPicker.setScrollingEnabled(false);
     }
 
     protected String getLampStateViewAdapterTag() {

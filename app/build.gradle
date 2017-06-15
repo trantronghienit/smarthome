@@ -22,7 +22,5 @@ dependencies {
     compile 'com.android.support:support-v4:19.0.+'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'org.jetbrains:annotations-java5:15.0'
-
-    compile 'com.shawnlin:number-picker:2.4.3'
-    compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
+    compile project(path: ':wheelpicker')
 }
