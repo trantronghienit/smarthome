@@ -15,11 +15,6 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import org.allseen.lsf.sdk.Lamp;
-import org.allseen.lsf.sdk.LampAbout;
-import org.allseen.lsf.sdk.LampDetails;
-import org.allseen.lsf.sdk.LampMake;
-import org.allseen.lsf.sdk.LightingDirector;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,19 +23,31 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.allseen.lsf.sdk.Lamp;
+import org.allseen.lsf.sdk.LampAbout;
+import org.allseen.lsf.sdk.LampDetails;
+import org.allseen.lsf.sdk.LampMake;
+import org.allseen.lsf.sdk.LightingDirector;
+
 public class LampDetailsFragment extends PageFrameChildFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lamp_details, container, false);
 
-        // TODO: 3/20/2017 get id devices
-        Lamp lamp = LightingDirector.get().getLamp(key);
-        Log.i("LampId", ""+ lamp.getId());
+        try {
+            Lamp lamp = LightingDirector.get().getLamp(key);
+            Log.i("LampId", "" + lamp.getId());
 
-        if (view != null) {
-            updateDetailFields(lamp);
+            if (view != null) {
+                updateDetailFields(lamp);
+            }
+        } catch (NullPointerException e) {
+            MessageExceptionUtil.NullPointerCause(e, "LampDetailsFragment", "onCreateView: lamp null");
+        } catch (Exception e) {
+            MessageExceptionUtil.ExceptionCause(e, "LampDetailsFragment", "onCreateView");
         }
+
 
         return view;
     }

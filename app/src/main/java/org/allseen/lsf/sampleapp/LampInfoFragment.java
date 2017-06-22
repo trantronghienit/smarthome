@@ -38,17 +38,6 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         itemType = SampleAppActivity.Type.LAMP;
-        if (itemType == SampleAppActivity.Type.LAMP) {
-            // FIXME: 6/15/2017 fix null
-//            switch (itemTypeInfo){
-//                case FAN:
-//                    Log.i(TAG, "onCreateView: FAN"  );
-//                    break;
-//                case PUMP:
-//                    Log.i(TAG, "onCreateView: PUMP"  );
-//                    break;
-//            }
-        }
 
         ((TextView)statusView.findViewById(R.id.statusLabelName)).setText(R.string.label_lamp_name);
 
@@ -135,7 +124,8 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
         return lamp != null ? lamp.getState() : null;
     }
 
-    public void removeElement(String lampID) {
-        super.removeElement(lampID);
+    public void removeElement(String lampID, SampleAppActivity currentActivity) {
+        super.removeElement(lampID, currentActivity);
     }
+
 }

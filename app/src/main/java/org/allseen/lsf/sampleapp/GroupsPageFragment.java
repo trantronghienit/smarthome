@@ -34,11 +34,6 @@ public class GroupsPageFragment extends PageMainContainerFragment {
     }
 
     @Override
-    public PageFrameChildFragment createInfoChildFragment(TypeInfo typeInfo) {
-        return new GroupInfoFragment();
-    }
-
-    @Override
     public PageFrameChildFragment createPresetsChildFragment() {
         return new GroupPresetsFragment();
     }

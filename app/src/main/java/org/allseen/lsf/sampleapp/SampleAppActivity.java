@@ -443,19 +443,20 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
-    public void onItemButtonMoreForDevice(PageFrameParentFragment parent, Type type, String itemID, PageFrameParentFragment.TypeInfo typeInfo) {
+    //// FIXME: 6/15/2017 ở đây
+    public void onItemButtonMoreForDevice(PageFrameParentFragment parent, Type type, String itemID) {
         switch (type) {
             case LAMP:
-                showInfoFragment(parent, itemID, typeInfo);
+                showInfoFragment(parent, itemID);
                 return;
         }
     }
 
 
     // showInfoFragment
-    private void showInfoFragment(PageFrameParentFragment parent, String itemID, PageFrameParentFragment.TypeInfo typeInfo) {
+    private void showInfoFragment(PageFrameParentFragment parent, String itemID) {
         pageFrameParent = parent;
-        parent.showInfoChildFragment(itemID, typeInfo);
+        parent.showInfoChildFragment(itemID);
     }
 
     public boolean applySceneElement(String sceneElementID) {
@@ -852,7 +853,7 @@ public class SampleAppActivity extends FragmentActivity implements
             }
         }
 
-        showInfoFragment(scenesPageFragment, popupItemID, null);
+        showInfoFragment(scenesPageFragment, popupItemID);
     }
 
     public void showLampDetailsFragment(LampsPageFragment parent, String key) {
@@ -1058,7 +1059,7 @@ public class SampleAppActivity extends FragmentActivity implements
 
         switch (item.getItemId()) {
             case R.id.group_info:
-                showInfoFragment((GroupsPageFragment) (getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)), popupItemID, null);
+                showInfoFragment((GroupsPageFragment) (getSupportFragmentManager().findFragmentByTag(GroupsPageFragment.TAG)), popupItemID);
                 break;
             case R.id.group_delete:
                 showConfirmDeleteGroupDialog(popupItemID);
@@ -1131,7 +1132,7 @@ public class SampleAppActivity extends FragmentActivity implements
                 // scene V1 creation workflow. Note that if the user backs out
                 // of the scene V1 creation process, we have to skip over the
                 // dummy info fragment (see ScenesPageFragment.onBackPressed())
-                parent.showInfoChildFragment(null, null);
+                parent.showInfoChildFragment(null);
             }
 
             parent.showEnterNameChildFragment();
@@ -1214,8 +1215,14 @@ public class SampleAppActivity extends FragmentActivity implements
                 colorItem.setColor(color);
             }
 
-            Log.d(SampleAppActivity.TAG, "Toggle power for " + colorItem.getName());
 
+            if (colorItem.isOn() && colorItem.getColor().getBrightness() != 0) {
+                Color color = colorItem.getColor();
+
+                color.setBrightness(0);
+                colorItem.setColor(color);
+            }
+            Log.d(SampleAppActivity.TAG, "Toggle power for " + colorItem.getName());
             colorItem.togglePower();
         }
     }
@@ -1413,7 +1420,7 @@ public class SampleAppActivity extends FragmentActivity implements
             // todo: xử lý khi thiết bị removed
             LampInfoFragment infoFragment = (LampInfoFragment) pageFragment.getChildFragmentManager().findFragmentByTag(PageFrameParentFragment.CHILD_TAG_INFO);
             if (infoFragment != null) {
-                infoFragment.removeElement(lampID);
+                infoFragment.removeElement(lampID, this);
             }
         }
 

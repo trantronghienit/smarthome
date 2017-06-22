@@ -25,8 +25,8 @@
     <string name="action_add">Add</string>
     <string name="action_next">Next</string>
     <string name="action_done">Done</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_dashboard">Onboarding Dashboard</string>
+    <string name="action_settings">Cài Đặt</string>
+    <string name="action_dashboard">Bảng Điều Khiển</string>
     <string name="menu_group_info">Group Info</string>
     <string name="menu_group_delete">Delete Group</string>
     <string name="menu_scene_element_apply">Apply Scene Element</string>
@@ -48,13 +48,13 @@
     <string name="title_tab_lamps">Thiết Bị (%1$d)</string>
     <string name="title_tab_groups">Groups (%1$d)</string>
     <string name="title_tab_scenes">Scenes (%1$d)</string>
-    <string name="title_lamp_info">LAMP INFO</string>
+    <string name="title_lamp_info">Thông Tin Thiết Bị</string>
     <string name="title_lamp_details">Lamp Details</string>
     <string name="title_lamp_rename">LAMP NAME</string>
     <string name="title_group_add">Add Group</string>
     <string name="title_group_edit">Edit Group</string>
     <string name="title_group_info">GROUP INFO</string>
-    <string name="title_group_rename">Rename Group</string>
+    <string name="title_group_rename">Đổi tên thiêts bị</string>
     <string name="title_scene_element_add">Add Scene Element</string>
     <string name="title_scene_element_edit">Edit Scene Element</string>
     <string name="title_scene_element_info">SCENE ELEMENT INFO</string>
@@ -83,7 +83,7 @@
     <string name="color_temperature">Color Temperature</string>
     <string name="saturation">Bão hòa</string>
     <string name="hue">Hue</string>
-    <string name="brightness">độ sáng của thiết bị hiện tại</string>
+    <string name="brightness">Bảng điều khiển</string>
 
     <string name="state_label_header_single">Chi tiết thiết bị</string>
     <string name="state_label_header_start">Bắt đầu thuộc tính</string>

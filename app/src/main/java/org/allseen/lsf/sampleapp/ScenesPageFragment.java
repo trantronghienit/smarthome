@@ -150,11 +150,6 @@ public class ScenesPageFragment extends PageMainContainerFragment {
     }
 
     @Override
-    public PageFrameChildFragment createInfoChildFragment(TypeInfo typeInfo) {
-        return null;
-    }
-
-    @Override
     public PageFrameChildFragment createPresetsChildFragment() {
         return
                 isMasterMode() ? null :

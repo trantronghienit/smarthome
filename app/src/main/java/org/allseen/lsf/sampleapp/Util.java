@@ -15,12 +15,10 @@
  */
 package org.allseen.lsf.sampleapp;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 
 import org.allseen.lsf.sdk.Group;
 import org.allseen.lsf.sdk.Lamp;
@@ -32,12 +30,46 @@ import org.allseen.lsf.sdk.Preset;
 import org.allseen.lsf.sdk.SceneElement;
 import org.allseen.lsf.sdk.SceneV2;
 
-import android.graphics.drawable.Drawable;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Util {
+    public static final String DEVICES_TYPE_TEMPERATURE_HUMIDITY = "BR40";
+    public static final String DEVICES_TYPE_FAN = "BR30";
+    public static final String DEVICES_TYPE_PUMP = "BR38";
+
+    public static final String DEVICES_TYPE_LIGHT_INTENSITY_ONE = "BT15";
+    public static final String DEVICES_TYPE_LIGHT_INTENSITY_TWO = "BT28";
+    public static final String DEVICES_TYPE_LIGHT_INTENSITY_THREE = "BT37";
+
+    public static final int TAG_TEMPERATURE_HUMIDITY = 0;
+    public static final int TAG_FAN = 1;
+    public static final int TAG_PUMP = 2;
+
+    public static final int TAG_LIGHT_INTENSITY_ONE = 3;
+    public static final int TAG_LIGHT_INTENSITY_TWO = 4;
+    public static final int TAG_LIGHT_INTENSITY_THREE = 5;
+
+    public static int CheckDeviceType(String deviceType) {
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_TEMPERATURE_HUMIDITY))
+            return TAG_TEMPERATURE_HUMIDITY;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_FAN))
+            return TAG_FAN;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_PUMP))
+            return TAG_PUMP;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_ONE))
+            return TAG_LIGHT_INTENSITY_ONE;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_TWO))
+            return TAG_LIGHT_INTENSITY_TWO;
+        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_THREE))
+            return TAG_LIGHT_INTENSITY_THREE;
+        return -1;
+    }
+
     public static SpannableStringBuilder createTextWithIcon(SampleAppActivity activity, int stringID, char placeholder, int drawableID) {
         CharSequence text = activity.getText(stringID);
         SpannableStringBuilder builder = new SpannableStringBuilder(text);

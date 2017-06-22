@@ -16,6 +16,16 @@ import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MutableColorItem;
 import org.jetbrains.annotations.Nullable;
 
+import static org.allseen.lsf.sampleapp.Util.CheckDeviceType;
+import static org.allseen.lsf.sampleapp.Util.DEVICES_TYPE_FAN;
+import static org.allseen.lsf.sampleapp.Util.DEVICES_TYPE_PUMP;
+import static org.allseen.lsf.sampleapp.Util.TAG_FAN;
+import static org.allseen.lsf.sampleapp.Util.TAG_LIGHT_INTENSITY_ONE;
+import static org.allseen.lsf.sampleapp.Util.TAG_LIGHT_INTENSITY_THREE;
+import static org.allseen.lsf.sampleapp.Util.TAG_LIGHT_INTENSITY_TWO;
+import static org.allseen.lsf.sampleapp.Util.TAG_PUMP;
+import static org.allseen.lsf.sampleapp.Util.TAG_TEMPERATURE_HUMIDITY;
+
 
 /**
  * Created by admin on 3/21/2017.
@@ -28,21 +38,7 @@ public class SystemDetailFrament extends PageFrameParentFragment {
     private TextView txtHumidity  , txtTemperature , txtPh;
     private Lamp lamp;
     private String TAG_LOG = "SystemDetailFrament";
-    public static final String DEVICES_TYPE_TEMPERATURE_HUMIDITY = "BR40";
-    public static final String DEVICES_TYPE_FAN = "BR30";
-    public static final String DEVICES_TYPE_PUMP = "BR38";
 
-    public static final String DEVICES_TYPE_LIGHT_INTENSITY_ONE = "BT15";
-    public static final String DEVICES_TYPE_LIGHT_INTENSITY_TWO = "BT28";
-    public static final String DEVICES_TYPE_LIGHT_INTENSITY_THREE = "BT37";
-
-    public static final int TAG_TEMPERATURE_HUMIDITY = 0;
-    public static final int TAG_FAN = 1;
-    public static final int TAG_PUMP = 2;
-
-    public static final int TAG_LIGHT_INTENSITY_ONE = 3;
-    public static final int TAG_LIGHT_INTENSITY_TWO = 4;
-    public static final int TAG_LIGHT_INTENSITY_THREE = 5;
     private final int DEFAULT_16BIT = 65535;
 
     private final String DEFAULT_VALUE = "000";
@@ -70,11 +66,6 @@ public class SystemDetailFrament extends PageFrameParentFragment {
 
     @Override
     public PageFrameChildFragment createInfoChildFragment() {
-        return null;
-    }
-
-    @Override
-    public PageFrameChildFragment createInfoChildFragment(TypeInfo typeInfo) {
         return null;
     }
 
@@ -161,21 +152,6 @@ public class SystemDetailFrament extends PageFrameParentFragment {
         return String.valueOf(result);
     }
 
-    public int CheckDeviceType(String deviceType){
-        if(deviceType.equalsIgnoreCase(DEVICES_TYPE_TEMPERATURE_HUMIDITY))
-            return TAG_TEMPERATURE_HUMIDITY;
-        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_FAN))
-            return TAG_FAN;
-        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_PUMP))
-            return TAG_PUMP;
-        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_ONE))
-            return TAG_LIGHT_INTENSITY_ONE;
-        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_TWO))
-            return TAG_LIGHT_INTENSITY_TWO;
-        if (deviceType.equalsIgnoreCase(DEVICES_TYPE_LIGHT_INTENSITY_THREE))
-            return TAG_LIGHT_INTENSITY_THREE;
-        return -1;
-    }
 
     @SuppressLint("StringFormatMatches")
     public void onLampRemoved(Lamp lamp) {

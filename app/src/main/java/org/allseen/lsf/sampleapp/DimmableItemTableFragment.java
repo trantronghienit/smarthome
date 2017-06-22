@@ -43,7 +43,6 @@ public abstract class DimmableItemTableFragment
 
     protected abstract Fragment getInfoFragment();
 
-    private PageFrameParentFragment.TypeInfo typeInfo;
     public void addItems(ColorItem[] items) {
         for (ColorItem item : items) {
             addItem(item);
@@ -103,12 +102,12 @@ public abstract class DimmableItemTableFragment
         TableRow tableRow = (TableRow) table.findViewWithTag(itemID);
         // nếu là thiết bị nhiệt độ độ ẩm thì ẩn đi
         String lampType = lamp.getDetails().getLampType().name();
-        boolean isDevivesOnOff = lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_PUMP)
-                || lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_FAN) || lampType.equalsIgnoreCase("INVALID");
-        boolean isDevicesOnlyShow = lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)
-                || lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_LIGHT_INTENSITY_ONE)
-                || lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_LIGHT_INTENSITY_TWO)
-                || lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_LIGHT_INTENSITY_THREE);
+        boolean isDevivesOnOff = lampType.equalsIgnoreCase(Util.DEVICES_TYPE_PUMP)
+                || lampType.equalsIgnoreCase(Util.DEVICES_TYPE_FAN) || lampType.equalsIgnoreCase("INVALID");
+        boolean isDevicesOnlyShow = lampType.equalsIgnoreCase(Util.DEVICES_TYPE_TEMPERATURE_HUMIDITY)
+                || lampType.equalsIgnoreCase(Util.DEVICES_TYPE_LIGHT_INTENSITY_ONE)
+                || lampType.equalsIgnoreCase(Util.DEVICES_TYPE_LIGHT_INTENSITY_TWO)
+                || lampType.equalsIgnoreCase(Util.DEVICES_TYPE_LIGHT_INTENSITY_THREE);
 
         int drawable = R.drawable.light_status_icon;
         boolean flagSetBackground;
@@ -131,21 +130,19 @@ public abstract class DimmableItemTableFragment
             txtItemName.setText(name);
             if (isDevivesOnOff) {
 
-                if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_PUMP)) {
+                if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_PUMP)) {
                     drawable = R.drawable.ic_pump;
-                    typeInfo = PageFrameParentFragment.TypeInfo.PUMP;
-                } else if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_FAN)) {
+
+                } else if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_FAN)) {
                     drawable = R.drawable.ic_fan;
-                    typeInfo = PageFrameParentFragment.TypeInfo.FAN;
                 }
                 powerButton.setVisibility(View.VISIBLE);
 //                infoButton.setEnabled(false);
                 flagSetBackground = false;
                 // device only show value then hide powerButton and infoButton disable click
             } else if (isDevicesOnlyShow) {
-                if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
+                if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
                     drawable = R.drawable.ic_humidity_temper;
-                    typeInfo = PageFrameParentFragment.TypeInfo.TEMPERATURE;
                 } else {
                     drawable = R.drawable.ic_lighting;
                 }
@@ -194,24 +191,20 @@ public abstract class DimmableItemTableFragment
             ((TextView) tableRow.findViewById(R.id.dimmableItemRowText)).setText(name);
 
             if (isDevivesOnOff) {
-                if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_PUMP)) {
+                if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_PUMP)) {
                     drawable = R.drawable.ic_pump;
-                    typeInfo = PageFrameParentFragment.TypeInfo.PUMP;
-                } else if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_FAN)) {
+                } else if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_FAN)) {
                     drawable = R.drawable.ic_fan;
-                    typeInfo = PageFrameParentFragment.TypeInfo.FAN;
-                } else if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
+                } else if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
                     drawable = R.drawable.ic_humidity_temper;
-                    typeInfo = PageFrameParentFragment.TypeInfo.TEMPERATURE;
                 }
                 powerButton.setVisibility(View.VISIBLE);
 //                infoButton.setEnabled(false);
                 flagSetBackground = false;
                 // device only show value then hide powerButton and infoButton disable click
             } else if (isDevicesOnlyShow) {
-                if (lampType.equalsIgnoreCase(SystemDetailFrament.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
+                if (lampType.equalsIgnoreCase(Util.DEVICES_TYPE_TEMPERATURE_HUMIDITY)) {
                     drawable = R.drawable.ic_humidity_temper;
-                    typeInfo = PageFrameParentFragment.TypeInfo.TEMPERATURE;
                 } else {
                     drawable = R.drawable.ic_lighting;
                 }
@@ -254,7 +247,7 @@ public abstract class DimmableItemTableFragment
             if (buttonID == R.id.dimmableItemButtonPower) {
                 ((SampleAppActivity) getActivity()).togglePower(type, button.getTag().toString());
             } else if (buttonID == R.id.dimmableItemButtonMore) {
-                ((SampleAppActivity) getActivity()).onItemButtonMoreForDevice(parent, type, button.getTag().toString(), typeInfo);
+                ((SampleAppActivity) getActivity()).onItemButtonMoreForDevice(parent, type, button.getTag().toString());
 
             }
         }

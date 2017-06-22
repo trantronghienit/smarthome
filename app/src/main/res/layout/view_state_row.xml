@@ -91,11 +91,11 @@
 
         <TextView
             android:id="@+id/stateLabelBrightness"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/startWithCurrentStateRow"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@string/brightness"
@@ -122,10 +122,10 @@
             android:orientation="vertical">
 
             <com.it.hientran.wheelpicker.WheelPicker
-                android:layout_weight="1"
                 android:id="@+id/stateSliderBrightness"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:background="#FFFF"
                 aigestudio:wheel_atmospheric="true"
                 aigestudio:wheel_curved="true"
@@ -136,19 +136,19 @@
                 aigestudio:wheel_item_text_color="#c7c7f2"
                 aigestudio:wheel_item_text_size="30dp"
                 aigestudio:wheel_selected_item_text_color="#023671"
-                aigestudio:wheel_visible_item_count="6"
-                />
-
+                aigestudio:wheel_visible_item_count="6" />
+            <!--info from lamp visibility gone-->
             <TextView
                 android:id="@+id/stateTextBrightness"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/na"
-                android:textStyle="bold"
                 android:textColor="@color/color_detail_devices"
-                android:textSize="@dimen/size_text_detail" />
+                android:textSize="@dimen/size_text_detail"
+                android:textStyle="bold"
+                android:visibility="gone" />
         </LinearLayout>
 
         <TextView

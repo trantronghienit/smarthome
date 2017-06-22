@@ -30,9 +30,8 @@ public class LampsPageFragment extends PageFrameParentFragment {
     }
 
     @Override
-    protected PageFrameChildFragment createChildFragment(String tag, TypeInfo typeInfo)
-    {
-        return tag == CHILD_TAG_DETAILS ? createDetailsChildFragment() : super.createChildFragment(tag, typeInfo);
+    protected PageFrameChildFragment createChildFragment(String tag) {
+        return tag == CHILD_TAG_DETAILS ? createDetailsChildFragment() : super.createChildFragment(tag);
     }
 
     @Override
@@ -45,10 +44,6 @@ public class LampsPageFragment extends PageFrameParentFragment {
         return new LampInfoFragment();
     }
 
-    @Override
-    public PageFrameChildFragment createInfoChildFragment(TypeInfo typeInfo) {
-        return new LampInfoFragment();
-    }
 
     @Override
     public PageFrameChildFragment createPresetsChildFragment() {

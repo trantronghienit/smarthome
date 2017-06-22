@@ -15,8 +15,10 @@
  */
 package org.allseen.lsf.sampleapp;
 
+import android.annotation.SuppressLint;
 import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.it.hientran.wheelpicker.WheelPicker;
 
@@ -31,16 +34,17 @@ import org.allseen.lsf.sdk.Color;
 import org.allseen.lsf.sdk.ColorItem;
 import org.allseen.lsf.sdk.LampCapabilities;
 import org.allseen.lsf.sdk.LampStateUniformity;
+import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 
 
 public abstract class DimmableItemInfoFragment extends PageFrameChildFragment implements View.OnClickListener {
 
     public static final String STATE_ITEM_TAG = "STATE";
+    private static final String TAG = "DimmableItemInfoFragment";
     public static int defaultIndicatorColor = 00000000;
 
     protected SampleAppActivity.Type itemType = SampleAppActivity.Type.LAMP;
-    protected PageFrameParentFragment.TypeInfo itemTypeInfo;
     protected LampStateViewAdapter stateAdapter;
 
     protected View statusView;
@@ -57,11 +61,11 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         stateView = view.findViewById(R.id.infoStateRow);
         txtState = (TextView) stateView.findViewById(R.id.stateTextBrightness);
         wheelPicker = (WheelPicker) stateView.findViewById(R.id.stateSliderBrightness);
-        wheelPicker.setScrollingEnabled(true);
         // power button
         ImageButton powerButton = (ImageButton)statusView.findViewById(R.id.statusButtonPower);
         powerButton.setTag(itemID);
         powerButton.setOnClickListener(this);
+        checkTypeDevice(wheelPicker, powerButton);
 
         // item name
         TextView nameLabel = (TextView)statusView.findViewById(R.id.statusLabelName);
@@ -79,9 +83,9 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         presetsButton.setOnClickListener(this);
         // state adapter
         stateAdapter = new LampStateViewAdapter(stateView, getLampStateViewAdapterTag(), getColorTempMin(), getColorTempSpan(), this);
-
         return view;
     }
+
 
     @Override
     public void onClick(View view) {
@@ -172,16 +176,49 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         parentStateView.findViewById(R.id.stateRowColorIndicator).getBackground().setColorFilter(color, Mode.MULTIPLY);
     }
 
-    // TODO: 6/14/2017  remove Element
-    public void removeElement(String lampID) {
-        txtState.setText("Thiết bị bị mất kết nối");
-        wheelPicker.setScrollingEnabled(false);
+    @SuppressLint("LongLogTag")
+    public void removeElement(String lampID, final SampleAppActivity currnetActivity) {
+        try {
+            currnetActivity.onBackPressed();
+        } catch (IllegalStateException e) {
+            txtState.setVisibility(View.VISIBLE);
+            txtState.setText("mất kết nối");
+            wheelPicker.setScrollingEnabled(false);
+            Log.e(TAG, "removeElement: error cause by IllegalStateException backstack");
+        }
+
     }
 
     protected String getLampStateViewAdapterTag() {
         return key;
     }
 
+    @SuppressLint("LongLogTag")
+    public void checkTypeDevice(WheelPicker wheelPicker, ImageButton powerButton) {
+        try {
+            String devicesType = LightingDirector.get().getLamp(key).getDetails().getLampType().name();
+            int tagDevice = Util.CheckDeviceType(devicesType);
+            switch (tagDevice) {
+
+                case Util.TAG_FAN:
+                case Util.TAG_PUMP:
+                    powerButton.setEnabled(true);
+                    wheelPicker.setScrollingEnabled(false);
+                    break;
+                case Util.TAG_TEMPERATURE_HUMIDITY:
+                case Util.TAG_LIGHT_INTENSITY_ONE:
+                case Util.TAG_LIGHT_INTENSITY_TWO:
+                case Util.TAG_LIGHT_INTENSITY_THREE:
+                    powerButton.setEnabled(false);
+                    wheelPicker.setScrollingEnabled(false);
+                    break;
+                default:
+                    Toast.makeText(getActivity(), "Lamp info", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "checkTypeDevice: " + e.getMessage());
+        }
+    }
     protected abstract int getLayoutID();
     protected abstract int getColorTempMin();
     protected abstract int getColorTempSpan();
