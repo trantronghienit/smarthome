@@ -31,9 +31,6 @@ import org.allseen.lsf.sdk.Lamp;
 import org.allseen.lsf.sdk.LampCapabilities;
 
 
-/**
- * thay đổi view picker thay cho seekbar
- */
 public abstract class DimmableItemTableFragment
         extends ScrollableTableFragment
         implements
@@ -150,9 +147,6 @@ public abstract class DimmableItemTableFragment
 //                infoButton.setEnabled(false);
                 flagSetBackground = false;
             } else {
-                // else is lamp then hide powerButton , but show numberPicker and infoButton
-                powerButton.setVisibility(View.INVISIBLE);
-//                infoButton.setEnabled(true);
                 flagSetBackground = true;
             }
 
@@ -209,10 +203,8 @@ public abstract class DimmableItemTableFragment
                     drawable = R.drawable.ic_lighting;
                 }
                 powerButton.setVisibility(View.INVISIBLE);
-//                infoButton.setEnabled(false);
                 flagSetBackground = false;
             } else {
-                powerButton.setVisibility(View.INVISIBLE);
                 flagSetBackground = true;
                 infoButton.setEnabled(true);
             }
@@ -247,8 +239,7 @@ public abstract class DimmableItemTableFragment
             if (buttonID == R.id.dimmableItemButtonPower) {
                 ((SampleAppActivity) getActivity()).togglePower(type, button.getTag().toString());
             } else if (buttonID == R.id.dimmableItemButtonMore) {
-                ((SampleAppActivity) getActivity()).onItemButtonMoreForDevice(parent, type, button.getTag().toString());
-
+                ((SampleAppActivity) getActivity()).onItemButtonMore(parent, type, button, button.getTag().toString(), null, true);
             }
         }
     }

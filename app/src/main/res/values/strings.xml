@@ -54,7 +54,7 @@
     <string name="title_group_add">Add Group</string>
     <string name="title_group_edit">Edit Group</string>
     <string name="title_group_info">GROUP INFO</string>
-    <string name="title_group_rename">Đổi tên thiêts bị</string>
+    <string name="title_group_rename">Đổi tên thiết bị</string>
     <string name="title_scene_element_add">Add Scene Element</string>
     <string name="title_scene_element_edit">Edit Scene Element</string>
     <string name="title_scene_element_info">SCENE ELEMENT INFO</string>
@@ -291,4 +291,6 @@
 
     <string name="number_picker_formatter">%02d</string>
     <string name="light_intensity_message">Off thiết bị theo dõi cường độ sáng tầng \"%1$s.\</string>
+    <string name="tracking_device_not_control">Thiết bị theo dõi hệ thống</string>
+    <string name="switch_device">Thiết bị chỉ \\\"Tắt\\\" or \\\"Bật\\\"</string>
 </resources>

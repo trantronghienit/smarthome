@@ -402,12 +402,6 @@ public class WheelDatePicker extends LinearLayout implements WheelPicker.OnItemS
         mPickerDay.setTypeface(tf);
     }
 
-    // TODO: 6/15/2017 write for two method
-    @Override
-    public void setScrollingEnabled(boolean enabled) {
-
-    }
-
     @Override
     public boolean isScrollable() {
         return false;

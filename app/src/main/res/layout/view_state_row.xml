@@ -204,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/na"
                 android:textSize="@dimen/font_size_2"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <TextView
@@ -259,7 +259,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/na"
                 android:textSize="@dimen/font_size_2"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </LinearLayout>
 
         <TextView
@@ -310,6 +310,7 @@
                 android:visibility="gone" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/stateTextColorTemp"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"

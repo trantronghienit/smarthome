@@ -525,8 +525,5 @@ public interface IWheelPicker {
      */
     void setTypeface(Typeface tf);
 
-    // TODO: 6/15/2017 add method enable or disable scroll
-    void setScrollingEnabled(boolean enabled);
-
     boolean isScrollable();
 }

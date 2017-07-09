@@ -690,6 +690,7 @@ public class WheelPicker extends View implements IDebug, IWheelPicker, Runnable 
         return (int) (mHalfWheelHeight - Math.cos(Math.toRadians(degree)) * mHalfWheelHeight);
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -721,7 +722,7 @@ public class WheelPicker extends View implements IDebug, IWheelPicker, Runnable 
                     mOnWheelChangeListener.onWheelScrollStateChanged(SCROLL_STATE_DRAGGING);
 
                 // 滚动内容
-                // Scroll WheelPicker's content
+                // todo Scroll WheelPicker's content fix if (Math.abs(move) < 1) --> if (Math.abs(move) < 2)
                 float move = event.getY() - mLastPointY;
                 if (Math.abs(move) < 2) break;
                 mScrollOffsetY += move;
@@ -857,6 +858,7 @@ public class WheelPicker extends View implements IDebug, IWheelPicker, Runnable 
         setSelectedItemPosition(position, true);
     }
 
+
     public void setSelectedItemPosition(int position, final boolean animated) {
         isTouchTriggered = false;
         if (animated && mScroller.isFinished()) { // We go non-animated regardless of "animated" parameter if scroller is in motion
@@ -868,6 +870,13 @@ public class WheelPicker extends View implements IDebug, IWheelPicker, Runnable 
                 itemDifference += (itemDifference > 0) ? -length : length;
             }
             mScroller.startScroll(0, mScroller.getCurrY(), 0, (-itemDifference) * mItemHeight);
+
+            // fixme fix bug setSelectedItemPosition
+            position = Math.min(position, mData.size() - 1);
+            position = Math.max(position, 0);
+            mSelectedItemPosition = position;
+            mCurrentItemPosition = position;
+            mScrollOffsetY = 0;
             mHandler.post(this);
         } else {
             if (!mScroller.isFinished())
@@ -1120,7 +1129,6 @@ public class WheelPicker extends View implements IDebug, IWheelPicker, Runnable 
     }
 
     // if true Scrolling Enabled and false if Scrolling Disabled
-    @Override
     public void setScrollingEnabled(boolean enabled) {
         mScrollable = enabled;
     }

@@ -28,15 +28,12 @@ import org.allseen.lsf.sdk.LampParameters;
 import org.allseen.lsf.sdk.LightingDirector;
 import org.allseen.lsf.sdk.MyLampState;
 
-;
-
 public class LampInfoFragment extends DimmableItemInfoFragment {
-
-    private static final String TAG = "LampInfoFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
         itemType = SampleAppActivity.Type.LAMP;
 
         ((TextView)statusView.findViewById(R.id.statusLabelName)).setText(R.string.label_lamp_name);
@@ -66,22 +63,17 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
     }
 
     protected void updateInfoFields(Lamp lamp) {
-        try {
-            if (lamp.getId().equals(key)) {
-                stateAdapter.setCapability(lamp.getCapability());
-                super.updateInfoFields(lamp);
+        if (lamp.getId().equals(key)) {
+            stateAdapter.setCapability(lamp.getCapability());
+            super.updateInfoFields(lamp);
 
-                LampParameters lampParams = lamp.getParameters();
-                setTextViewValue(view, R.id.lampInfoTextLumens, lampParams.getLumens(), 0);
-                setTextViewValue(view, R.id.lampInfoTextEnergy, lampParams.getEnergyUsageMilliwatts(), R.string.units_mw);
-            }
-        } catch (NullPointerException e) {
-            MessageExceptionUtil.NullPointerCause(e, "LampInfoFragment", "updateInfoFields");
-        } catch (Exception e) {
-            MessageExceptionUtil.ExceptionCause(e, "LampInfoFragment", "updateInfoFields");
+
+            LampParameters lampParams = lamp.getParameters();
+            setTextViewValue(view, R.id.lampInfoTextLumens, lampParams.getLumens(), 0);
+            setTextViewValue(view, R.id.lampInfoTextEnergy, lampParams.getEnergyUsageMilliwatts(), R.string.units_mw);
         }
-
     }
+
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_lamp_info;
@@ -123,9 +115,5 @@ public class LampInfoFragment extends DimmableItemInfoFragment {
 
         return lamp != null ? lamp.getState() : null;
     }
-
-    public void removeElement(String lampID, SampleAppActivity currentActivity) {
-        super.removeElement(lampID, currentActivity);
-    }
-
 }
+

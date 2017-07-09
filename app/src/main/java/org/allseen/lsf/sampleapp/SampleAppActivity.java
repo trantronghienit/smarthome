@@ -309,7 +309,6 @@ public class SampleAppActivity extends FragmentActivity implements
     @Override
     public void onResume() {
         super.onResume();
-
         isForeground = true;
     }
 
@@ -427,10 +426,9 @@ public class SampleAppActivity extends FragmentActivity implements
 
     public void onItemButtonMore(PageFrameParentFragment parent, Type type, View button, String itemID, String subItemID, boolean enabled) {
         switch (type) {
-            // TODO: 6/15/2017 edit LAMP
-//            case LAMP:
-//                showInfoFragment(parent, itemID);
-//                return;
+            case LAMP:
+                showInfoFragment(parent, itemID);
+                return;
             case GROUP:
                 showGroupMorePopup(button, itemID);
                 return;
@@ -443,17 +441,6 @@ public class SampleAppActivity extends FragmentActivity implements
         }
     }
 
-    //// FIXME: 6/15/2017 ở đây
-    public void onItemButtonMoreForDevice(PageFrameParentFragment parent, Type type, String itemID) {
-        switch (type) {
-            case LAMP:
-                showInfoFragment(parent, itemID);
-                return;
-        }
-    }
-
-
-    // showInfoFragment
     private void showInfoFragment(PageFrameParentFragment parent, String itemID) {
         pageFrameParent = parent;
         parent.showInfoChildFragment(itemID);
@@ -1054,7 +1041,6 @@ public class SampleAppActivity extends FragmentActivity implements
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        Log.d(SampleAppActivity.TAG, "onMenuItemClick(): " + item.getItemId());
         boolean result = true;
 
         switch (item.getItemId()) {

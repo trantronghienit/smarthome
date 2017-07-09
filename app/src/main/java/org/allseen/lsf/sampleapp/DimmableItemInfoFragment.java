@@ -51,6 +51,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     protected View stateView;
     protected TextView txtState;
     protected WheelPicker wheelPicker;
+    private ImageButton powerButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,10 +60,12 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         view = inflater.inflate(getLayoutID(), container, false);
         statusView = view.findViewById(R.id.infoStatusRow);
         stateView = view.findViewById(R.id.infoStateRow);
+
         txtState = (TextView) stateView.findViewById(R.id.stateTextBrightness);
         wheelPicker = (WheelPicker) stateView.findViewById(R.id.stateSliderBrightness);
+//        wheelPicker.setScrollingEnabled(true);
         // power button
-        ImageButton powerButton = (ImageButton)statusView.findViewById(R.id.statusButtonPower);
+        powerButton = (ImageButton)statusView.findViewById(R.id.statusButtonPower);
         powerButton.setTag(itemID);
         powerButton.setOnClickListener(this);
         checkTypeDevice(wheelPicker, powerButton);
@@ -104,9 +107,10 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     public void setField(SeekBar seekBar) {
         int seekBarID = seekBar.getId();
 
-        if (seekBarID == R.id.stateSliderBrightness) {
-            ((SampleAppActivity)getActivity()).setBrightness(itemType, seekBar.getTag().toString(), seekBar.getProgress());
-        } else if (seekBarID == R.id.stateSliderHue) {
+//        if (seekBarID == R.id.stateSliderBrightness) {
+//            ((SampleAppActivity)getActivity()).setBrightness(itemType, seekBar.getTag().toString(), seekBar.getProgress());
+//        }
+        if (seekBarID == R.id.stateSliderHue) {
             ((SampleAppActivity)getActivity()).setHue(itemType, seekBar.getTag().toString(), seekBar.getProgress());
         } else if (seekBarID == R.id.stateSliderSaturation) {
             ((SampleAppActivity)getActivity()).setSaturation(itemType, seekBar.getTag().toString(), seekBar.getProgress());
@@ -116,6 +120,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
     }
 
     public void setField(WheelPicker picker, int value) {
+        this.wheelPicker = picker;
         int pickerID = picker.getId();
         SampleAppActivity sampleAppActivity = ((SampleAppActivity) getActivity());
         try {
@@ -132,6 +137,8 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
 
     public void updateInfoFields(ColorItem colorItem) {
         if (colorItem.getId().equals(key)) {
+            Log.i(TAG, "updateInfoFields: " + colorItem.getColor().getBrightness());
+//            wheelPicker.setScrollingEnabled(true);
             updateInfoFields(colorItem.getName(), colorItem.getState(), colorItem.getCapability(), colorItem.getUniformity());
         }
     }
@@ -144,9 +151,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         } else {
             setImageButtonBackgroundResource(statusView, R.id.statusButtonPower, R.drawable.power_button_mix);
         }
-
         setTextViewValue(statusView, R.id.statusTextName, name, 0);
-
         stateAdapter.setBrightness(color.getBrightness(), uniformity.brightness);
         stateAdapter.setHue(color.getHue(), uniformity.hue);
         stateAdapter.setSaturation(color.getSaturation(), uniformity.saturation);
@@ -183,10 +188,9 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
         } catch (IllegalStateException e) {
             txtState.setVisibility(View.VISIBLE);
             txtState.setText("mất kết nối");
-            wheelPicker.setScrollingEnabled(false);
+//            wheelPicker.setScrollingEnabled(false);
             Log.e(TAG, "removeElement: error cause by IllegalStateException backstack");
         }
-
     }
 
     protected String getLampStateViewAdapterTag() {
@@ -199,18 +203,24 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
             String devicesType = LightingDirector.get().getLamp(key).getDetails().getLampType().name();
             int tagDevice = Util.CheckDeviceType(devicesType);
             switch (tagDevice) {
-
                 case Util.TAG_FAN:
                 case Util.TAG_PUMP:
                     powerButton.setEnabled(true);
-                    wheelPicker.setScrollingEnabled(false);
+                    txtState.setText(getActivity().getString(R.string.switch_device));
+                    txtState.setVisibility(View.VISIBLE);
+                    wheelPicker.setVisibility(View.INVISIBLE);
+//                    wheelPicker.setScrollingEnabled(false);
                     break;
                 case Util.TAG_TEMPERATURE_HUMIDITY:
                 case Util.TAG_LIGHT_INTENSITY_ONE:
                 case Util.TAG_LIGHT_INTENSITY_TWO:
                 case Util.TAG_LIGHT_INTENSITY_THREE:
                     powerButton.setEnabled(false);
-                    wheelPicker.setScrollingEnabled(false);
+                    txtState.setText(getActivity().getString(R.string.tracking_device_not_control));
+                    txtState.setVisibility(View.VISIBLE);
+                    wheelPicker.setVisibility(View.INVISIBLE);
+                    powerButton.setEnabled(false);
+//                    wheelPicker.setScrollingEnabled(false);
                     break;
                 default:
                     Toast.makeText(getActivity(), "Lamp info", Toast.LENGTH_SHORT).show();
@@ -219,6 +229,7 @@ public abstract class DimmableItemInfoFragment extends PageFrameChildFragment im
             Log.e(TAG, "checkTypeDevice: " + e.getMessage());
         }
     }
+
     protected abstract int getLayoutID();
     protected abstract int getColorTempMin();
     protected abstract int getColorTempSpan();

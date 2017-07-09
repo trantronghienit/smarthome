@@ -62,7 +62,7 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, View.OnCli
             brightnessPicker.setData(listData);
 
         brightnessPicker.setTag(tag);
-        brightnessPicker.setSaveEnabled(false);
+        brightnessPicker.setSaveEnabled(true);
         PickerListener pickerListener = new PickerListener(brightnessPicker);
         brightnessPicker.setOnItemSelectedListener(pickerListener);
         brightnessPicker.setOnWheelChangeListener(pickerListener);
@@ -163,7 +163,6 @@ public class LampStateViewAdapter implements OnSeekBarChangeListener, View.OnCli
         Log.i("LampStateViewAdapter" , " " + viewBrightness);
         if (capability.dimmable >= LampCapabilities.SOME) {
             brightnessPicker.setSelectedItemPosition(viewBrightness);
-            Log.i("LampState", " " + brightnessPicker.getCurrentItemPosition());
             parentFragment.setTextViewValue(stateView, R.id.stateTextBrightness, viewBrightness, R.string.units_percent);
         }
     }

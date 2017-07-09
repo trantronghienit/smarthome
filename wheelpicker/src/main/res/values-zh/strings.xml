@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) bản quyền thuộc về abc
+  -->
+
 <resources>
     <string name="app_name">HandleDemo</string>
     <string name="Year">年</string>
