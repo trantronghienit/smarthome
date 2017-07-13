@@ -98,7 +98,11 @@ public abstract class DimmableItemTableFragment
         final boolean isEnabled = enabled;
         TableRow tableRow = (TableRow) table.findViewWithTag(itemID);
         // nếu là thiết bị nhiệt độ độ ẩm thì ẩn đi
-        String lampType = lamp.getDetails().getLampType().name();
+        String lampType = null;
+        if (lamp.getDetails().getLampType() != null)
+            lampType = lamp.getDetails().getLampType().name();
+        else
+            lampType = "INVALID";
         boolean isDevivesOnOff = lampType.equalsIgnoreCase(Util.DEVICES_TYPE_PUMP)
                 || lampType.equalsIgnoreCase(Util.DEVICES_TYPE_FAN) || lampType.equalsIgnoreCase("INVALID");
         boolean isDevicesOnlyShow = lampType.equalsIgnoreCase(Util.DEVICES_TYPE_TEMPERATURE_HUMIDITY)
